@@ -1,0 +1,52 @@
+<include file="Public:header" />
+<include file="Public:left" />
+	 <style>
+	 td{text-align:center;}
+	 </style>
+     <section>
+      <div class="page_title">
+          <h2 class="fl">发货信息</h2>
+      </div>
+
+<form class="form-horizontal form-validate" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="id" value="7300">
+    <ul class="ulColumn2">
+        <li>
+            <span class="item_name" style="width:120px;">收货人：</span>{$res.name}  <span class="item_name" style="width:120px;">手机号码：</span>{$res.mobile}
+        </li>
+        <li>
+            <span class="item_name" style="width:120px;">收货地址：</span>{$res.province}{$res.city}{$res.county}{$res.address}
+        </li>
+        <li>
+            <span class="item_name" style="width:120px;">快递公司：</span>{$res.shipping_name}  <span class="item_name" style="width:120px;">单号：</span>{$res.shipping_num}
+        </li>
+
+        <li>
+            <span class="item_name" style="width:120px;">物流信息</span>
+        </li>
+        <if condition="!empty($express)">
+        <volist name="express" id="vo">
+        <li>
+            <span class="item_name" style="width:200px;">{$vo.time}</span>{$vo.context}
+        </li>
+        </volist>
+            <else />
+            <li>
+                <span class="item_name" style="width:200px;">暂无物流信息</span>
+            </li>
+
+        </if>
+        </ul>
+</form>
+     </section>
+ </div>
+</section>
+<script>
+    $(".express").change(function(){
+       var name=$(this).find("option:selected").data('name');
+
+       $(".exprss_name").val(name);
+    });
+</script>
+</body>
+</html>

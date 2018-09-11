@@ -1,0 +1,37 @@
+{include file="Public:header" /}
+{include file="Public:left" /}
+
+<form method="post" enctype="multipart/form-data">
+    <section>
+        <h2><strong>满返优惠券设置</strong></h2>
+        <ul class="ulColumn2">
+            <li>
+                <span class="item_name" style="width:120px;">是否开启：</span>
+                <label> <input type="radio" name="status" {if condition="isset($data['status'])" }checked {/if} value="1" />是</label>
+                <label> <input type="radio" name="status" {if condition="!isset($data['status'])" } checked{/if}  value="1" />否</label>
+            </li>
+            <li>
+                <span class="item_name" style="width:120px;">满额：</span>
+                <input type="number" name="fullmoney"  class="textbox textbox_295"   {if condition="isset($data['fullmoney'])" }value="{$data.fullmoney}" {/if} />
+            </li>
+            <li>
+                <span class="item_name" style="width:120px;">返优惠券：</span>
+                <select  name="voucher_id"  class="textbox textbox_295" style="height: 35px">
+                    {volist name="list" id="vo"}
+                    <option value="{$vo['id']}" {if condition="isset($data['voucher_id']) && $data['voucher_id'] eq $vo['id']" } selected {/if}>{$vo['name']}</option>
+                    {/volist}
+                </select>
+            </li>
+            <li>
+                <span class="item_name" style="width:120px;"></span>
+                <input type="submit" class="link_btn" value="提交" />
+            </li>
+        </ul>
+    </section>
+</form>
+
+</div>
+</section>
+</body>
+
+</html>

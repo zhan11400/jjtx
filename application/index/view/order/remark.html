@@ -1,0 +1,36 @@
+<include file="Public:header" />
+<include file="Public:left" />
+	 <style>
+	 td{text-align:center;}
+	 </style>
+     <section>
+      <div class="page_title">
+          <h2 class="fl">备注信息</h2>
+      </div>
+
+<form class="form-horizontal form-validate" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="id" value="7300">
+    <ul class="ulColumn2">
+        <li>
+            <span class="item_name" style="width:120px;">备注内容：</span>
+            <input type="text" name="remark" class="textbox textbox_295" placeholder="备注内容..." value="{$res.remark}"/>
+        </li>
+        <span class="item_name" style="width:120px;"></span>
+        <input type="hidden" name="id"  value="{$id}"/>
+        <input type="submit" class="link_btn" value="提交"/>
+
+        </li>
+        </ul>
+</form>
+     </section>
+ </div>
+</section>
+<script>
+    $(".express").change(function(){
+       var name=$(this).find("option:selected").data('name');
+
+       $(".exprss_name").val(name);
+    });
+</script>
+</body>
+</html>

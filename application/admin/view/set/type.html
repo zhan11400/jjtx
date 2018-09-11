@@ -1,0 +1,39 @@
+<include file="Public:header" /> <include file="Public:left" />
+<style>
+	td {
+		text-align: center;
+	}
+</style>
+<section>
+	<div class="page_title">
+		<h2 class="fl">首页分类</h2>
+	<!--暂时屏蔽	<a class="fr" href="{:url('Set/topic_add')}">添加分类</a>-->
+	</div>
+	<table class="table">
+		<tr>
+			<th>编号</th>
+			<th>名称</th>
+			<th>图片</th>
+			<th>介绍</th>
+			<th>操作</th>
+		</tr>
+
+		<volist name="list" id="vo" key="k">
+		<tr>
+			<td>{$vo.id}</td>
+			<td>{$vo.title}</td>
+			<td><img src="__STATIC__/uploads/{$vo.images}" style="height: 80px;"></td>
+			<td style="width: 850px;">{$vo.des}</td>
+			<td>
+				<a href="{:url('Set/type_edit',array('id'=>$vo['id']))}" class="inner_btn">编辑</a>
+			</td>
+		</tr>
+		</volist>
+	</table>
+</section>
+
+</div>
+</section>
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<include file="Public:header" />
+<include file="Public:left" />
+
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" <if condition="isset($data['coupon_id'])">value="{$data.coupon_id}"</if> />
+    <section>
+        <h2><strong>优惠券编辑</strong><a class="fr" href="{:url('coupon/index')}">返回优惠券列表</a></h2>
+
+        <ul class="ulColumn2">
+
+            <li>
+                <span class="item_name" style="width:120px;">名称：</span>
+                <input type="text" name="name" <if condition="isset($data['name'])" >value="{$data.name}" </if> class="textbox textbox_295" />
+            </li>
+            <li>
+                <span class="item_name" style="width:120px;">订单满多少使用：</span>
+                <input type="number" name="quota" <if condition="isset($data['fullmoney'])" >value="{$data.fullmoney}" </if> class="textbox textbox_295" />
+            </li>
+            <li>
+                <span class="item_name" style="width:120px;">抵扣金额：</span>
+                <input type="number" name="deduction" <if condition="isset($data['deduction'])" >value="{$data.deduction}" </if> class="textbox textbox_295" />
+            </li>
+            <li>
+                <span class="item_name" style="width:120px;">发放数量：</span>
+                <input type="number" name="num" <if condition="isset($data['count'])" >value="{$data.count}" </if> class="textbox textbox_295" />
+            </li>
+            <li>
+                <span class="item_name" style="width:120px;">有效天数：</span>
+                <input type="number" name="day" <if condition="isset($data['useful_day'])" >value="{$data.useful_day}"</if> class="textbox textbox_295" />
+            </li>
+            <li>
+                <span class="item_name" style="width:120px;">状态：</span>
+                <input type="radio" name="status" value="1" <if condition="(isset($data['status']) && $data['status'] eq 1) || !isset($data['status'])">checked</if>>正常
+                <input type="radio" name="status" value="0" <if condition="isset($data['status']) && $data['status'] eq 0">checked</if> >停用
+            </li>
+            <li>
+                <span class="item_name" style="width:120px;">主图上传：</span>
+                <div class="textbox textbox_295" style="width:200px;display: inline-block;">
+                    <input type="file" name="goods_image" />
+                </div>
+                <img src="__STATIC__/uploads/{$data.image}" height="80">
+            </li>
+            <li>
+                <span class="item_name" style="width:120px;"></span>
+                <input type="submit" class="link_btn" value="提交" />
+            </li>
+        </ul>
+    </section>
+</form>
+
+</div>
+</section>
+</body>
+
+</html>

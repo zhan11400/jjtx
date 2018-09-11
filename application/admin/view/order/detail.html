@@ -1,0 +1,158 @@
+<include file="Public:header" />
+<include file="Public:left" />
+	 <style>
+	 td{text-align:center;}
+	 </style>
+     <section>
+      <div class="page_title">
+          <h2 class="fl">订单详情</h2>
+      </div>
+         <div class="page-content" style="display: block;">
+             <style type="text/css">
+                 .ordertable { width:100%;position: relative;margin-bottom:10px}
+                 .ordertable tr td:first-child { text-align: right }
+                 .ordertable tr td {padding:10px 5px 0;vertical-align: top}
+                 .ordertable1 tr td { text-align: right; }
+                 .ops .btn { padding:5px 10px;}
+             </style>
+             <form class="form-horizontal form" action="" method="post">
+                 <input type="hidden" name="id" value="7300">
+
+                 <input type="hidden" name="dispatchid" value="">
+
+                 <div class="row order-container">
+                     <div class="order-container-left">
+                         <div class="panel-body">
+                             <h4 class="m-t-none m-b">订单信息</h4>
+                             <div class="form-group" style="padding:0 10px;">
+                                 <table class="ordertable" style="table-layout:fixed">
+                                     <tbody><tr><td style="width:80px">订单编号：</td><td>{$res.order_sn}</td></tr>
+                                     <tr><td>订单金额：</td><td>￥{$res.price}</td></tr>
+                                     <tr><td>买家：</td><td>{$res.nickname} {$res.mobile}</td></tr>
+                                     <tr><td style="width:80px">订单状态:</td>
+                                         <td style="word-break: break-all;white-space: normal">
+                                             <switch name="res.status">
+                                                 <case value="0" break="0">待支付</case>
+                                                 <case value="1">待发货</case>
+                                                 <case value="2">待收货</case>
+                                                 <case value="3">已完成</case>
+                                                 <default />待支付
+                                             </switch>
+                                         </td></tr>
+                                     <tr><td>运费：</td><td>{$res.send_fee}元</td></tr>
+                                     <tr><td>优惠券抵扣：</td><td>{$res.coupon_money}元</td></tr>
+                                     <tr><td style="width:80px">备注:</td><td style="word-break: break-all;white-space: normal">
+                                             {$res.remark}   <a  href="{:url('Order/remark',array('id'=>$res['id']))}" style="color:red">修改备注</a>
+                                         </td></tr>
+                                     </tbody>
+                                 </table>
+                            </div>
+                             <h4 class="m-t-none m-b">物流信息</h4>
+                             <div class="form-group" style="padding:0 10px;">
+                                 <table class="ordertable" style="table-layout:fixed;border-top:1px dotted #ccc">
+                                     <tbody>
+                                     <tr><td style="width:80px">配送方式：</td><td><if condition="$res.send_type eq 0">快递(包邮)<else/>加急</if> 费用：{$res.send_fee} </td></tr>
+                                     <tr><td style="width:80px">收货人：</td><td style="word-break: break-all;white-space: normal">{$res.name}</td> </tr>
+                                     <tr><td style="width:80px">收货人手机：</td><td style="word-break: break-all;white-space: normal">{$res.mobile}</td> </tr>
+                                     <tr><td style="width:80px">收货人地址：</td><td style="word-break: break-all;white-space: normal">{$res.province}{$res.city}{$res.county}{$res.address}</td> </tr>
+
+
+                                     </tbody>
+                                 </table>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <br>
+                 <div class="panel panel-default">
+                     <div class="panel-heading">
+                         <span>商品信息</span>
+                     </div>
+                     <div class="panel-body table-responsive">
+                         <table class="table table-hover">
+                             <thead class="navbar-inner">
+                             <tr>
+                                 <th style="width:200px">图片</th>
+                                 <th style="width:200px">标题</th>
+                                 <th>规格</th>
+                                 <th style="text-align: center;">单价(元)/数量</th>
+
+                                 <!--<th style="width:5%;">操作</th>-->
+                             </tr>
+                             </thead>
+                             <tbody>
+                             <volist name="order_goods" id="vo">
+                             <tr>
+                                 <td class="full"><img height="50px" src="{$vo.goods_image}" alt=""></td>
+                                 <td class="full">{$vo.goods_name}</td>
+                                 <td>{$vo.spec_name}</td>
+                                 <td style="color:red;font-weight:bold;text-align: right;">{$vo.goods_price}  <br>x{$vo.goods_num}       </td>
+                             </tr>
+                             </volist>
+
+                             </tbody></table>
+                     </div>
+                 </div>
+
+                 <div class="order-container-right">
+                     <div class="panel-body" style="height:auto;">
+                         <div class="form-group">
+                             <label class="col-sm-3 control-label"></label>
+                             <div class="col-sm-9 col-xs-12">
+                                 <p class="form-control-static ops" style="line-height: 80px">
+                                     <switch name="res.status">
+                                         <case value="0" break="0">  <a onclick="return confirm('确认后台支付该订单吗？')" href="{:url('Order/pay',array('id'=>$res['id']))}" class="btn btn-primary btn-xs">确认支付</a></case>
+                                         <case value="1">  <a style="line-height: 40px;border: 1px solid #ccc;padding: 5px" href="{:url('Order/send',array('id'=>$res['id']))}" class="btn btn-primary btn-xs">前去发货</a></case>
+                                         <default />
+                                     </switch>
+
+                                 </p>
+                             </div>
+                         </div>
+                     </div>
+
+                 </div>
+             </form>
+
+             <script language="javascript">
+                 $(function () {
+                     $("#showdiymore1").click(function () {
+                         $(".diymore1").show();
+                         $(".diymore11").hide();
+                     });
+
+                     $("#showdiymore2").click(function () {
+                         $(".diymore2").show();
+                         $(".diymore22").hide();
+                     });
+                 });
+
+                 function showDiyInfo(obj){
+                     var data = $(obj).attr('data');
+                     var id = "diyinfo_" + data;
+
+                     var hide = $(obj).attr('hide');
+                     if(hide=='1'){
+                         $("#"+id).slideDown();
+                     }
+                     else{
+                         $("#"+id).slideUp();
+                     }
+                     $(obj).attr('hide',hide=='1'?'0':'1');
+                 }
+                 document.getElementById('asd').className();
+             </script>
+
+         </div>
+     </section>
+ </div>
+</section>
+<script>
+    $(".express").change(function(){
+       var name=$(this).find("option:selected").data('name');
+
+       $(".exprss_name").val(name);
+    });
+</script>
+</body>
+</html>

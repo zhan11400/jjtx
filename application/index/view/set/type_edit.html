@@ -1,0 +1,40 @@
+<include file="Public:header" /> <include file="Public:left" />
+
+<form method="post" enctype="multipart/form-data" >
+	<input type="hidden" name="id" value="{$data.id}"/>
+	<section>
+		<h2><strong>编辑</strong>
+			<a class="fr" href="{:url('Set/type')}">返回分类列表</a>
+		</h2>
+
+		<ul class="ulColumn2">
+
+			<li>
+				<span class="item_name" style="width:120px;">名称：</span>
+				<input type="text" name="title" value="{$data.title}" class="textbox textbox_295" />
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">描述：</span>
+				<textarea  name="des" class="textbox textbox_295" style="height: 100px" placeholder="描述" >{$data.des}</textarea>
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">分类图上传：</span>
+				<input type="file" name="images" class="" />
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">分类图：</span>
+				<img height="120" src="__STATIC__/uploads/{$data.images}" alt="">
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;"></span>
+				<input type="submit" class="link_btn" value="提交" />
+			</li>
+		</ul>
+	</section>
+</form>
+
+</div>
+</section>
+</body>
+
+</html>

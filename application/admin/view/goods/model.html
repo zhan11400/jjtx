@@ -1,0 +1,147 @@
+<include file="public/header" />
+<include file="public/left" />
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+	<div class="flexigrid">
+
+		<div class="mDiv">
+			<div class="ftitle">
+				<h3>车型列表</h3>
+				<h5>(共{$count}条记录)</h5>
+			</div>
+			<div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+			<form class="navbar-form form-inline" action="" method="get">
+				<div class="sDiv">
+					<div class="sDiv2">
+						<input type="text" size="30" name="keyword" class="qsbox" placeholder="搜索相关数据...">
+						<input type="submit" class="btn" value="搜索">
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div class="hDiv">
+			<div class="hDivBox">
+				<table cellspacing="0" cellpadding="0">
+					<thead>
+					<tr>
+						<th class="sign" axis="col0">
+							<div style="width: 24px;"><i class="ico-check"></i></div>
+						</th>
+						<th align="left" abbr="article_title" axis="col3" class="">
+							<div style="text-align: left; width: 100px;" class="">ID</div>
+						</th>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 200px;" class="">标题</div>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 200px;" class="">图片</div>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 200px;" class="">状态</div>
+						<th align="center" axis="col1" class="handle">
+							<div style="text-align: center; width: 150px;">操作</div>
+						</th>
+						<th style="width:100%" axis="col7">
+							<div></div>
+						</th>
+					</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+		<div class="tDiv">
+			<div class="tDiv2">
+				<div class="fbutton">
+					<a href="{:url('goods/add_model',array('pid'=>$pid))}">
+						<div class="add" title="新增">
+							<switch name="level">
+								<case value="1"><span><i class="fa fa-plus"></i>新增车型</span></case>
+								<case value="2"><span><i class="fa fa-plus"></i>新增型号</span></case>
+								<case value="3"><span><i class="fa fa-plus"></i>新增排量</span></case>
+								<case value="4"><span><i class="fa fa-plus"></i>新增年份</span></case>
+							</switch>
+						</div>
+					</a>
+				</div>
+			</div>
+			<div style="clear:both"></div>
+		</div>
+		<div class="bDiv" style="height: auto;">
+			<div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+				<table>
+					<tbody>
+					<foreach name="list" item="vo" key="k" >
+						<tr>
+							<td class="sign">
+								<div style="width: 24px;"><i class="ico-check"></i></div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width: 100px;">{$vo.id}</div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width: 200px;">{$vo.name}</div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width: 200px;"><img src="__STATIC__/uploads/{$vo['image']}" height="20" alt=""></div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width: 200px;"><if condition="$vo.status eq 1">显示<else />隐藏</if></div>
+							</td>
+							<td align="center" class="handle">
+								<div style="text-align: center; width: 170px; max-width:170px;">
+									<lt name="level" value="4"><a href="{:url('Goods/model',array('pid'=>$vo['id']))}" class="btn blue"><i class="fa fa-pencil-square-o"></i>子分类</a></lt>
+									<a href="{:url('Goods/add_model',array('id'=>$vo['id']))}" class="btn blue"><i class="fa fa-pencil-square-o"></i>编辑</a>
+									<a class="btn red"  href="javascript:void(0)" data-url="{:url('Goods/del_model')}" data-id="{$vo.id}" onclick="delfun(this)"><i class="fa fa-trash-o"></i>删除</a>
+								</div>
+							</td>
+							<td align="" class="" style="width: 100%;">
+								<div>&nbsp;</div>
+							</td>
+						</tr>
+					</foreach>
+					</tbody>
+				</table>
+			</div>
+			<div class="iDiv" style="display: none;"></div>
+		</div>
+		{$list->render()}
+		<!--分页位置-->
+	</div>
+</div>
+<script>
+	$(document).ready(function(){
+		// 表格行点击选中切换
+		$('#flexigrid > table>tbody >tr').click(function(){
+			$(this).toggleClass('trSelected');
+		});
+		// 点击刷新数据
+		$('.fa-refresh').click(function(){
+			location.href = location.href;
+		});
+
+	});
+	function delfun(obj) {
+		// 删除按钮
+		layer.confirm('确认删除？', {
+			btn: ['确定', '取消'] //按钮
+		}, function () {
+			$.ajax({
+				type: 'post',
+				url: $(obj).attr('data-url'),
+				data : {id:$(obj).attr('data-id')},
+				dataType: 'json',
+				success: function (data) {
+					if (data == 1) {
+						$(obj).parent().parent().parent().remove();
+						layer.closeAll();
+					} else {
+						layer.alert('删除失败', {icon: 2});  //alert('删除失败');
+					}
+				}
+			})
+		}, function () {
+		});
+	}
+</script>
+</body>
+</html>

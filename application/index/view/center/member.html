@@ -1,0 +1,171 @@
+<include file="Public:header"/>
+<include file="Public:left"/>
+<style>
+	td {
+		text-align: center;
+	}
+	.page_title h2{line-height: normal}
+	.table th{line-height: 20px}
+</style>
+<style type="text/css" src="__STATIC__/admin/css/style.css" ></style>
+<section>
+	<div class="page_title">
+		<h2 class="fl">会员列表</h2>
+		<form action="">
+			<select name="status">
+				<option value="">全部状态</option>
+				<option value="0" <eq name="status" value="0">selected </eq>>禁止状态</option>
+				<option value="1" <eq name="status" value="1">selected </eq>>正常状态</option>
+			</select>
+			<select name="type">
+				<option value="">全部会员</option>
+				<option value="1" <eq name="type" value="1">selected </eq>>注册会员</option>
+				<option value="2" <eq name="type" value="2">selected </eq>>股东会员</option>
+			</select>
+			<input type="text" class="page_title_input" name="keyword" placeholder="可搜索昵称或手机号码" value="{$keyword}">
+			<input  class="page_title_submit" type="submit" value="搜索">
+			<input  style="width: 100px;line-height: 20px;" type="submit" name="export" value="导出excel" />
+		</form>
+
+	</div>
+	<table class="table">
+			<tr>
+			<th>会员ID</th>
+			<th>会员资料</th>
+			<th>用户地址</th>
+			<th>会员类型</th>
+			<th>状态</th>
+			<th style="width: 120px">信用额<br>(点击修改)</th>
+			<th style="width: 120px">折扣<br>(点击修改)</th>
+			<th>成交订单数</th>
+			<th>成交金额</th>
+			<th>注册时间</th>
+			<th>操作</th>
+		</tr>
+		<volist name="list" id="vo" key="k">
+			<tr>
+				<td>{$vo.id}</td>
+				<td><img src="{$vo.headimage}" style="height: 20px;">{$vo.nickname}<br>{$vo.mobile}<br><eq name="vo.sex" value="1">男<else />女</eq></td>
+				<td>{$vo.province}{$vo.city}{$vo.county}</td>
+				<td>
+					<select name="type" id="type" data-id="{$vo['id']}">
+						<!--<option value="0" <eq name="vo.type" value="0">selected</eq> >游客</option>-->
+						<option value="1" <eq name="vo.type" value="1">selected</eq>>注册会员</option>
+						<option value="2" <eq name="vo.type" value="2">selected</eq>>股东会员</option>
+					</select>
+				</td>
+				<td>
+					<if condition="$vo['status'] eq '0'">
+						待审核
+						<else/>
+						正常状态
+					</if>
+				</td>
+				<td><span title="点击可编辑，enter键确认修改"  class="credit">{$vo.credit}</span><input class="credit_input"  style="width: 80px" type="hidden"  data-id="{$vo.id}" value="{$vo.credit}">
+				</td>
+				<td><span title="点击可编辑，enter键确认修改"  class="discount">{$vo.discount}</span><input class="discount_input"  style="width: 80px" type="hidden"  data-id="{$vo.id}" value="{$vo.discount}">
+				</td>
+				<td><?php echo sprintf("%.2f",db("order")->where("uid=".$vo['id']." and status=2")->count());?></td>
+				<td><?php echo sprintf("%.2f",db("order")->where("uid=".$vo['id']." and status=2")->sum("price"));?></td>
+				<td>{$vo.create_time|date="Y-m-d H:i:s",###}</td>
+				<td>
+					<p style="height: 40px;line-height: 40px;text-align: center;">
+						<a href="{:url('center/main',array('id'=>$vo['id']))}" class="inner_btn">查看毛利</a>
+
+						<if condition="$vo['status'] eq '1'">
+							<a onclick="return confirm('确定设置黑名单？')" href="{:url('center/setblack',array('id'=>$vo['id'],'status'=>0))}" class="inner_btn">设置拉黑</a>
+						</if>
+						<if condition="$vo['status'] eq '0'">
+							<a onclick="return confirm('确定设置正常？')" href="{:url('center/setblack',array('id'=>$vo['id'],'status'=>1))}" class="inner_btn">设置正常</a>
+						</if>
+					</p>
+				</td>
+			</tr>
+		</volist>
+	</table>
+	{$list->render()}
+</section>
+<script>
+	$(document).ready(function() {
+		//tab
+		$(".admin_tab li a").click(function() {
+			var liindex = $(".admin_tab li a").index(this);
+			$(this).addClass("active").parent().siblings().find("a").removeClass("active");
+			$(".admin_tab_cont").eq(liindex).fadeIn(150).siblings(".admin_tab_cont").hide();
+		});
+		$(".table .credit").click(function(){
+			$(this).hide();
+			$(this).siblings("input").prop("type","number");
+		});
+		$(".table .credit_input").keydown(function(e){
+			var ev = document.all ? window.event : e;
+			if (ev.keyCode == 13) {
+				var str = $(this);
+				var id = $(this).data("id");
+				var a = new Number($(this).val());
+				var num = a.toFixed(2);
+				$.post("{:url('center/credit')}", {id: id, num: num}, function (result) {
+					if (result == 1) {
+						str.prop("type", "hidden");
+						str.val(num);
+						str.siblings("span").show();
+						str.siblings("span").html(num);
+					} else {
+						alert('系统繁忙，稍后再试');
+					}
+				});
+
+			}
+		})
+
+		$(".discount").click(function(){
+			$(this).hide();
+			$(this).siblings("input").prop("type","number");
+		});
+		$("#type").change(function(){
+			var type=$(this).val();
+			var id=$(this).data("id");
+			if(confirm('确认变更会员类型？')) {
+				$.post("{:url('center/grade')}", {id: id, type: type}, function (res) {
+					if(res=='-1'){
+						alert('系统繁忙，稍后再试！');
+					}
+				})
+			}
+		})
+		$(".discount_input").keydown(function(e){
+			var ev = document.all ? window.event : e;
+			if (ev.keyCode == 13) {
+				var str = $(this);
+				var id = $(this).data("id");
+				var a = new Number($(this).val());
+				var num = a.toFixed(2);
+				$.post("{:url('center/discount')}", {id: id, num: num}, function (result) {
+					if (result == 1) {
+						str.prop("type", "hidden");
+						str.val(num);
+						str.siblings("span").show();
+						str.siblings("span").html(num);
+					} else {
+						alert('系统繁忙，稍后再试');
+					}
+				});
+
+			}
+		})
+		$(".grade").change(function(){
+			var status=$(this).val();
+			$.post("{:url('member/grade')}",{status:$(this).val(),id:$(this).data('id')},function(result){
+				if(result!=1){
+					alert('系统繁忙，稍后再试');
+				}
+			});
+		})
+	});
+</script>
+
+</div>
+</section>
+</body>
+
+</html>

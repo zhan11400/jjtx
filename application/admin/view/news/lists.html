@@ -1,0 +1,59 @@
+<include file="Public:header" /> <include file="Public:left" />
+<style>
+	td {
+		text-align: center;
+	}
+</style>
+<section>
+	<div class="page_title">
+		<h2 class="fl">新闻列表</h2>
+		<form>
+			<select name="type">
+				<option value="">全部类型</option>
+				<option value="1" <eq name="type" value="1">selected </eq>>{$res[0]['name']}</option>
+				<option value="2" <eq name="type" value="2">selected </eq>>{$res[1]['name']}</option>
+				<option value="3" <eq name="type" value="3">selected </eq>>{$res[2]['name']}</option>
+			</select>
+			<input type="text" class="page_title_input" name="keyword" placeholder="可搜索标题" value="{$keyword}" style="line-height: 16px;height: 16px;">
+			<input  class="page_title_submit" type="submit" value="搜索" style="height: 24px;width: 55px;line-height: 16px;cursor: pointer;">
+		</form>
+	</div>
+	<table class="table">
+		<tr>
+			<th>编号</th>
+			<th>标题</th>
+			<th>来源</th>
+			<th>类型</th>
+			<th>时间</th>
+			<th>图片</th>
+			<th>操作</th>
+		</tr>
+
+		<volist name="list" id="vo" key="k">
+		<tr>
+			<td style="width: 60px;">{$vo.id}</td>
+			<td style="width: 350px;">{$vo.title}</td>
+			<td>{$vo.name}</td>
+			<if condition="$vo['type'] eq '1'">
+				<td>{$res[0]['name']}</td>
+			<elseif condition="$vo['type'] eq '2'">
+				<td>{$res[1]['name']}</td>
+			<elseif condition="$vo['type'] eq '3'">
+				<td>{$res[2]['name']}</td>
+			</if>
+			<td>{$vo.time|date="Y-m-d H:i:s",###}</td>
+			<td><img src="__STATIC__/uploads/{$vo.images}" style="height:100px;"></td>
+			<td>
+				<a href="{:url('news/add',array('id'=>$vo['id']))}" class="inner_btn">编辑</a>
+				<a onclick="return confirm('删除后数据无法还原，确定删除新闻？')" href="{:url('news/del',array('id'=>$vo['id']))}" class="inner_btn">删除</a>
+			</td>
+		</tr>
+		</volist>
+	</table>
+</section>
+
+</div>
+</section>
+</body>
+
+</html>

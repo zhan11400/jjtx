@@ -1,0 +1,92 @@
+<include file="Public:header" /> <include file="Public:left" />
+
+<form method="post" enctype="multipart/form-data" >
+	<input type="hidden" name="id" <if condition="$data neq ''"> value="{$data.id}" </if>/>
+	<section>
+		<h2><strong>编辑</strong>
+			<a class="fr" href="{:url('News/lists')}">返回新闻列表</a>
+		</h2>
+		<ul class="ulColumn2">
+			<li>
+				<span class="item_name" style="width:120px;">标题：</span>
+				<input type="text" name="title" <if condition="$data neq ''"> value="{$data.title}" </if> class="textbox textbox_295" />
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">来源：</span>
+				<input type="text" name="name" <if condition="$data neq ''"> value="{$data.name}" </if> class="textbox textbox_295" />
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">类型：</span>
+				<select name="type">
+					<if condition="$data neq ''">
+						<volist name="res" id="vo">
+						<if condition="$data['type'] eq $vo['id']">
+							<option value="{$vo.id}" selected>{$vo.name}</option>
+						<else/>
+							<option value="{$vo.id}">{$vo.name}</option>
+						</if>
+						</volist>
+					<else/>
+						<volist name="res" id="vo">
+							<option value="{$vo.id}">{$vo.name}</option>
+						</volist>
+					</if>
+				</select>
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">新闻图上传：</span>
+				<input type="file" name="images" class="" />
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">新闻图片：</span>
+				<if condition="$data neq ''">
+					<img height="120" src="__STATIC__/uploads/{$data.images}" alt="">
+				<else/>
+					<img height="120" src="" alt="">
+				</if>
+			</li>
+			<li style="height:auto;">
+                <span class="item_name" style="width:120px;">内容：</span>
+                <script id="editor" name="des" type="text/plain" style="width:700px;height:300px;margin-left:125px; margin-top:8px;">
+                	<if condition="$data neq ''">{$data['des']|htmlspecialchars_decode}</if>
+                </script>
+            </li>
+			<li>
+				<span class="item_name" style="width:120px;"></span>
+				<input type="submit" class="link_btn" value="提交" />
+			</li>
+		</ul>
+		<div style="height: 150px;"></div>
+	</section>
+</form>
+
+</div>
+</section>
+<script type="text/javascript">
+    //实例化编辑器
+    //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+    var ue = UE.getEditor('editor');
+
+    function isFocus(e) {
+        alert(UE.getEditor('editor').isFocus());
+        UE.dom.domUtils.preventDefault(e)
+    }
+
+    function setblur(e) {
+        UE.getEditor('editor').blur();
+        UE.dom.domUtils.preventDefault(e)
+    }
+
+    function insertHtml() {
+        var value = prompt('插入html代码', '');
+        UE.getEditor('editor').execCommand('insertHtml', value)
+    }
+
+    function createEditor() {
+        enableBtn();
+        UE.getEditor('editor');
+    }
+</script>
+</body>
+
+</html>

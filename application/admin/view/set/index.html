@@ -1,0 +1,37 @@
+<include file="public:header" />
+<include file="public:left" />
+
+	<form method="post" enctype="multipart/form-data" id="brandForm">
+     <section>
+      <h2><strong>系统设置</strong></h2>
+
+      <ul class="ulColumn2">
+       <volist name="list" id="vo">
+       <li>
+        <span class="item_name" style="width:100px;">{$vo['key']}：</span>
+        <input type="text" name="value" data-name="{$vo['id']}" value="{$vo['value']}"  class="textbox textbox_295 value" style="width: 80%"/>
+       </li>
+       </volist>
+      </ul>
+     </section>
+	 </form>
+ </div>
+</section>
+</body>
+</html>
+<script>
+ $(".value").keyup(function(){
+
+     var name=$(this).data("name");
+     var value=$(this).val();
+  $.post("{:url('set/deal')}",{
+   name:name,
+   value:value
+  },function(result){
+    if(result!=1){
+     alert('系统繁忙，稍后再试');
+    }
+  });
+ });
+
+</script>

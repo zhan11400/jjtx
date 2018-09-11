@@ -1,0 +1,49 @@
+<tr class="model_par">
+    <td style="width:100px;">
+
+        <a href="javascript:;" class="fa fa-move" title="拖动调整此显示顺序">移动</a>&nbsp;
+        <a href="javascript:;" onclick="deleteParam1(this)"  style="margin-top:10px;" title="删除">删除</a>
+    </td>
+    <td>
+        <select name="model1[]" style="width:100%"  class="textbox textbox_295 model1" >
+            <volist name="data" id="do">
+                <option value="{$do.id}">{$do.name}</option>
+            </volist>
+        </select>
+    </td>
+    <td>
+        <select name="model2[]" style="width:100%"  class="textbox textbox_295 model2" >
+            <option value="0">请选择车型</option>
+        </select>
+    </td>
+    <td>
+        <select name="model3[]" style="width:100%"  class="textbox textbox_295 model3" >
+            <option value="0">请选择型号</option>
+        </select>
+    </td>
+    <td>
+        <select name="model4[]" style="width:100%"  class="textbox textbox_295 model4" >
+           <option value="0">请选择排量</option>
+        </select>
+    </td>
+</tr>
+<script>
+    $(".model1").change(function(){
+        var that=$(this).parents(".model_par");
+        $.post("{:url('goods/model2')}",{pid:$(this).val()},function(result){
+            that.find(".model2").html(result)
+        });
+    });
+    $(".model2").change(function(){
+        var that=$(this).parents(".model_par");
+        $.post("{:url('goods/model3')}",{pid:$(this).val()},function(result){
+            that.find(".model3").html(result)
+        });
+    });
+    $(".model3").change(function(){
+        var that=$(this).parents(".model_par");
+        $.post("{:url('goods/model4')}",{pid:$(this).val()},function(result){
+            that.find(".model4").html(result)
+        });
+    });
+</script>

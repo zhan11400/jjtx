@@ -1,0 +1,58 @@
+<include file="Public:header" />
+<include file="Public:left" />
+
+	 <style>
+	 td{text-align:center;}
+	 </style>
+     <section>
+      <div class="page_title">
+       <h2 class="fl">管理员列表</h2>
+		  <a class="fr" href="{:url('admin/add')}">添加管理员</a>
+      </div>
+      <table class="table">
+       <tr>
+        <th>管理员编号</th>
+        <th>管理员账号</th>
+        <th>管理员上次登陆时间</th>
+		<th>管理员上次登陆Ip</th>
+		<th>管理员姓名</th>
+		<th>管理员联系电话</th>
+		<th>管理员联系地址</th>
+        <th>操作</th>
+       </tr>
+	   
+	   
+	   {volist name="data" id="vo" key="k"}
+       <tr>
+        <td><div class="cut_title ellipsis">{$k}</div></td>
+		<td>{$vo.account}</td>
+		<td>{$vo.logintime|date="Y-m-d H:i:s",###}</td>
+		<td>{$vo.loginip}</td>
+		<td>{$vo.real_name}</td>
+		<td>{$vo.phone}</td>
+		<td>{$vo.address}</td>
+        <td>
+		 <a href="{:url('Admin/edit',array('id'=>$vo['id']))}" class="inner_btn">编辑</a>
+         <a onclick="return confirm('确认删除？')" href="{:url('Admin/del',array('id'=>$vo['id']))}"  class="inner_btn" >删除</a>
+        </td>
+       </tr>
+	   {/volist}
+      </table>
+	  {$data->render()}
+     </section>
+
+     <script>
+     $(document).ready(function(){
+		 $(".admin_tab li a").click(function(){
+		  var liindex = $(".admin_tab li a").index(this);
+		  $(this).addClass("active").parent().siblings().find("a").removeClass("active");
+		  $(".admin_tab_cont").eq(liindex).fadeIn(150).siblings(".admin_tab_cont").hide();
+		 });
+		 });
+     </script>
+
+
+ </div>
+</section>
+</body>
+</html>

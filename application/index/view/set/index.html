@@ -1,0 +1,35 @@
+<include file="public:header" />
+<include file="public:left" />
+
+	<form method="post" enctype="multipart/form-data" id="brandForm">
+     <section>
+      <h2><strong>系统设置</strong></h2>
+
+      <ul class="ulColumn2">
+
+       <li>
+        <span class="item_name" style="width:100px;">价格比例：</span>
+        <input type="text" name="value" value="{$list['percentage']}"  class="textbox textbox_295 value" style="width:100px"/>%(建议高于100)
+       </li>
+
+      </ul>
+     </section>
+	 </form>
+ </div>
+</section>
+</body>
+</html>
+<script>
+ $(".value").keyup(function(){
+
+     var value=$(this).val();
+  $.post("{:url('set/deal')}",{
+   value:value
+  },function(result){
+    if(result!=1){
+     alert('系统繁忙，稍后再试');
+    }
+  });
+ });
+
+</script>

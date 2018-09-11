@@ -1,0 +1,53 @@
+<include file="public:header" />
+<include file="public:left" />
+<form method="post" enctype="multipart/form-data" id="brandForm">
+	<section>
+		<h2><strong>版块介绍编辑</strong></h2>
+		<ul class="ulColumn2">
+			<li>
+				<span class="item_name" style="width:120px;">图片上传：</span>
+				<input type="file" name="images" class="" />
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">图片：</span>
+				<img height="120" src="__STATIC__/uploads/{$data.images}" alt="">
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">标题：</span>
+				<input type="text" name="title" value="{$data.title}" class="textbox textbox_295" />
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">详细：</span>
+				<textarea  name="des" class="textbox textbox_295" style="height: 100px" placeholder="详细" >{$data.des}</textarea>
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;"></span>
+				<input type="button" class="link_btn" value="提交" />
+			</li>
+		</ul>
+	</section>
+</form>
+<!--tabStyle-->
+<script type="text/javascript">
+	$(document).ready(function() {
+		//tab
+		$(".admin_tab li a").click(function() {
+			var liindex = $(".admin_tab li a").index(this);
+			$(this).addClass("active").parent().siblings().find("a").removeClass("active");
+			$(".admin_tab_cont").eq(liindex).fadeIn(150).siblings(".admin_tab_cont").hide();
+		});
+
+		$(".link_btn").click(function() {
+
+			$("#brandForm").submit();
+
+		});
+
+	});
+</script>
+
+</div>
+</section>
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+<include file="Public:header" />
+<include file="Public:left" />
+	<form action="{:url('Admin/add')}" method="post" enctype="multipart/form-data" id="brandForm">
+	<input type="hidden" name="id" value="{$res.id}"/>
+	<input type="hidden" name="old_account" value="{$res.account}"/>
+	<input type="hidden" name="old_password" value="{$res.password}"/>
+     <section>
+      <h2><strong>管理员编辑</strong></h2>
+      <ul class="ulColumn2">
+       <li>
+        <span class="item_name" style="width:120px;">管理员账号：</span>
+        <input type="text" value="{$res.account}" readonly class="textbox textbox_295" name="account" id="account" placeholder="管理员账号..."/>
+       </li>
+
+	   
+	   <li>
+        <span class="item_name" style="width:120px;">管理员密码：</span>
+        <input type="password" value="" class="textbox textbox_295" name="passwd" id="passwd" placeholder="管理员密码..."/>
+       </li>
+
+	   
+	   <li>
+        <span class="item_name" style="width:120px;">确认密码：</span>
+        <input type="password" value="" class="textbox textbox_295" name="repasswd" id="repasswd" placeholder="确认密码..."/>
+       </li>
+	   
+	   <li>
+        <span class="item_name" style="width:120px;">真实姓名：</span>
+        <input type="text" value="{$res.real_name}" class="textbox textbox_295" name="real_name" id="real_name" placeholder="真实姓名..."/>
+       </li>
+	   
+	   <li>
+        <span class="item_name" style="width:120px;">联系电话：</span>
+        <input type="text" value="{$res.phone}" class="textbox textbox_295" name="phone" id="phone" placeholder="联系电话..."/>
+       </li>
+
+	   
+	   <li>
+        <span class="item_name" style="width:120px;">联系地址：</span>
+        <input type="text" value="{$res.address}" class="textbox textbox_295" name="address" id="address" placeholder="联系地址..."/>
+       </li>
+       <li>
+        <span class="item_name" style="width:120px;"></span>
+        <input type="button" class="link_btn" value="提交"/>
+       </li>
+      </ul>
+     </section>
+	 </form>
+     <!--tabStyle-->
+     <script type="text/javascript">
+     $(document).ready(function(){
+		 //tab
+		 $(".admin_tab li a").click(function(){
+		  var liindex = $(".admin_tab li a").index(this);
+		  $(this).addClass("active").parent().siblings().find("a").removeClass("active");
+		  $(".admin_tab_cont").eq(liindex).fadeIn(150).siblings(".admin_tab_cont").hide();
+		 });
+		 $(".link_btn").click(function(){
+			
+			if($("#account").val()==""){
+				alert("管理员账号不能为空!");
+				return false;
+			}
+			
+			if($("#passwd").val()==""){
+				alert("管理员密码不能为空!");
+				return false;
+			}
+			
+			if($("#passwd").val()!=$("#repasswd").val()){
+				alert("两次密码不一样!");
+				return false;
+			}
+			if($("#real_name").val()==""){
+				alert("真实姓名不能为空!");
+				return false;
+			}
+			if($("#phone").val()==""){
+				alert("联系电话不能为空!");
+				return false;
+			}
+			if($("#address").val()==""){
+				alert("联系地址不能为空!");
+				return false;
+			}
+			$("#brandForm").submit();
+		 });
+
+		 });
+     </script>
+
+ </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>后台登录</title>
+<meta name="author" content="广州利大" />
+<link rel="stylesheet" type="text/css" href="__STATIC__/admin/css/style.css" />
+<style>
+body{height:100%;background:#16a085;overflow:hidden;}
+canvas{z-index:-1;position:absolute;}
+</style>
+<script src="__STATIC__/admin/js/jquery.js"></script>
+<script src="__STATIC__/admin/js/Particleground.js"></script>
+<script>
+$(document).ready(function() {
+	//粒子背景特效
+    $('body').particleground({
+		dotColor: '#5cbdaa',
+		lineColor: '#5cbdaa'
+	});
+
+  
+	$(".submit_btn").click(function(){
+
+		if($("#account").val()==""){
+			alert("账号不能为空!");
+			return false;
+		}
+
+		if($("#passwd").val()==""){
+			alert("密码不能为空!");
+			return false;
+		}
+
+		if($("#verify_code").val()==""){
+			alert("验证码不能为空!");
+			return false;
+		}
+
+
+	});
+
+        $(".yzm").click(function(){
+            if( $(this).attr("src").indexOf('?')>0){
+                $(this).attr("src", $(this).attr("src")+'&random='+Math.random());
+            }else{
+                $(this).attr("src", $(this).attr("src").replace(/\?.*$/,'')+'?'+Math.random());
+            }
+        });
+
+});
+</script>
+</head>
+<body>
+<form action="{:url('Login/login_do')}" method="post" id="loginForm"/>
+  <dl class="admin_login">
+   <dt>
+    <strong>经销商后台管理系统</strong>
+    <em>Management System</em>
+   </dt>
+   <dd class="user_icon">
+    <input type="text" placeholder="账号" class="login_txtbx" name="account" id="account"/>
+   </dd>
+   <dd class="pwd_icon">
+    <input type="password" placeholder="密码" class="login_txtbx" name="passwd" id="passwd"/>
+   </dd>
+   <dd class="val_icon">
+    <div class="checkcode">
+      <input type="text" placeholder="验证码" maxlength="5" name="verifyCode" class="login_txtbx" id="verify_code">
+    </div>
+    <img src="/admin/Login/captchaImg" alt="captcha" class="yzm"  title="换一张" width="170" height="42" style="float:right; display:block; cursor:pointer;" />
+   </dd>
+   <dd>
+    <input type="submit" value="立即登陆" class="submit_btn"/>
+   </dd>
+   <dd>
+    <p>© 2017-2018 了解科技 版权所有</p>
+   </dd>
+  </dl>
+</form>
+</body>
+</html>

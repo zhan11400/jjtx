@@ -1,0 +1,103 @@
+<include file="Public:header"/>
+<include file="Public:left"/>
+<style>
+	td {
+		text-align: center;
+	}
+</style>
+<style type="text/css" src="__STATIC__/admin/css/style.css" ></style>
+<section>
+	<div class="page_title">
+		<h2 class="fl">会员列表</h2>
+		<form action="">
+			<select name="status">
+				<option value="">全部状态</option>
+				<option value="0" <eq name="status" value="0">selected </eq>>禁止状态</option>
+				<option value="1" <eq name="status" value="1">selected </eq>>正常状态</option>
+			</select>
+			<select name="type">
+				<option value="">全部会员</option>
+				<option value="1" <eq name="type" value="1">selected </eq>>银卡会员</option>
+				<option value="2" <eq name="type" value="2">selected </eq>>金卡会员</option>
+				<option value="3" <eq name="type" value="3">selected </eq>>铂金卡会员</option>
+				<option value="4" <eq name="type" value="4">selected </eq>>黑金卡会员</option>
+			</select>
+			<input type="text" class="page_title_input" name="keyword" placeholder="可搜索昵称或手机号码" value="{$keyword}">
+			<input  class="page_title_submit" type="submit" value="搜索">
+		</form>
+	</div>
+	<table class="table">
+		<tr>
+			<th>会员编号</th>
+			<th>会员资料</th>
+			<th>识别码</th>
+			<th>会员类型</th>
+			<th>状态</th>
+			<th>会员头像</th>
+			<th>操作</th>
+		</tr>
+
+		<volist name="list" id="vo" key="k">
+			<tr>
+				<td>{$vo.id}</td>
+				<td>{$vo.nickname}<br>{$vo.mobile}<br>{$vo.province}{$vo.city}{$vo.county}</td>
+				<td>{$vo.number}</td>
+				<td>
+					<if condition="$vo['type'] eq '1'">
+						银卡会员
+					<elseif condition="$vo['type'] eq '2'">
+						金卡会员
+					<elseif condition="$vo['type'] eq '3'">
+						铂金卡会员
+					<elseif condition="$vo['type'] eq '4'">
+						黑金卡会员
+					</if>
+					
+				</td>
+				<td>
+					<if condition="$vo['status'] eq '0'">
+					拉黑状态
+					<else/>
+					正常状态
+					</if>
+				</td>
+				<td><img src="{$vo.wx_avatar}" style="height: 80px;"></td>
+				
+				<td>
+					<p style="height: 40px;line-height: 40px;text-align: center;">
+					<if condition="$vo['status'] eq '1'">
+					<a onclick="return confirm('确定设置黑名单？')" href="{:url('member/setblack',array('id'=>$vo['id'],'status'=>0))}" class="inner_btn">拉黑</a>
+					</if>
+					<if condition="$vo['status'] eq '0'">
+					<a onclick="return confirm('确定取消黑名单？')" href="{:url('member/setblack',array('id'=>$vo['id'],'status'=>1))}" class="inner_btn">取消拉黑</a>
+					</if>
+					<a onclick="return confirm('确定变为银卡会员？')" href="{:url('member/grade',array('id'=>$vo['id'],'status'=>1))}" class="inner_btn">银卡</a>
+					</p>
+					<p style="height: 40px;line-height: 40px;text-align: center;">
+					<a onclick="return confirm('确定变为金卡会员？')" href="{:url('member/grade',array('id'=>$vo['id'],'status'=>2))}" class="inner_btn">金卡</a>
+					<a onclick="return confirm('确定变为铂金卡会员？')" href="{:url('member/grade',array('id'=>$vo['id'],'status'=>3))}" class="inner_btn">铂金卡</a>
+					<a onclick="return confirm('确定变为黑金卡会员？')" href="{:url('member/grade',array('id'=>$vo['id'],'status'=>4))}" class="inner_btn">黑金卡</a>
+					</p>
+				</td>
+			</tr>
+		</volist>
+	</table>
+
+</section>
+	{$list->render()}
+<script>
+	$(document).ready(function() {
+		//tab
+		$(".admin_tab li a").click(function() {
+			var liindex = $(".admin_tab li a").index(this);
+			$(this).addClass("active").parent().siblings().find("a").removeClass("active");
+			$(".admin_tab_cont").eq(liindex).fadeIn(150).siblings(".admin_tab_cont").hide();
+		});
+	});
+</script>
+
+</div>
+</section>
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+<include file="public:header" />
+<include file="public:left" />
+	 <style>
+	 td{text-align:center;}
+	 </style>
+     <section>
+      <div class="page_title">
+       <h2 class="fl">轮播图</h2>
+          <a class="fr" href="{:url('set/banner_edit')}">新增banner图</a>
+      </div>
+      <table class="table">
+       <tr>
+        <th>id</th>
+           <th>标题</th>
+        <th>图片</th>
+           <th>状态</th>
+           <th>顺序</th>
+        <th>操作</th>
+       </tr>
+	   
+	   
+	   <volist name="res" id="vo">
+       <tr>
+        <td  ><div class="cut_title ellipsis">{$vo.id}</div></td>
+           <td>{$vo.title}</td>
+		<td><img src="__STATIC__/uploads/{$vo.pic}" style="width: 80px;height: 80px;"></td>
+           <td><eq name="vo.status" value="0">弃用<else />启用</eq></td>
+           <td>{$vo.sort}</td>
+        <td>
+		 <a href="{:url('set/banner_edit',array('id'=>$vo['id']))}" class="inner_btn">编辑</a>
+         <a href="{:url('set/banner_del',array('id'=>$vo['id']))}" class="inner_btn">删除</a>
+        </td>
+       </tr>
+	   </volist>
+
+      </table>
+
+      
+     </section>
+
+     <!--tabStyle-->
+     <script>
+     $(document).ready(function(){
+		 //tab
+		 $(".admin_tab li a").click(function(){
+		  var liindex = $(".admin_tab li a").index(this);
+		  $(this).addClass("active").parent().siblings().find("a").removeClass("active");
+		  $(".admin_tab_cont").eq(liindex).fadeIn(150).siblings(".admin_tab_cont").hide();
+		 });
+		 });
+     </script>
+
+
+ </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<include file="public/header" />
+<include file="public/left" />
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+	<div class="flexigrid">
+
+		<div class="mDiv">
+			<div class="ftitle">
+				<h3>会员列表</h3>
+				<h5>(共{$count}条记录)</h5>
+			</div>
+			<div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+			<form class="navbar-form form-inline" action="" method="get">
+				<div class="sDiv">
+					<div class="sDiv2">
+
+						<select name="status" class="select">
+							<option value="">全部状态</option>
+							<option value="0" <eq name="status" value="0">selected </eq>>禁止状态</option>
+							<option value="1" <eq name="status" value="1">selected </eq>>正常状态</option>
+						</select>
+						<select name="type" class="select">
+							<option value="">全部会员</option>
+							<option value="1" <eq name="type" value="1">selected </eq>>注册会员</option>
+							<option value="2" <eq name="type" value="2">selected </eq>>股东会员</option>
+							<option value="3" <eq name="type" value="3">selected </eq>>经销商</option>
+						</select>
+						<input type="text" class="qsbox" name="keyword" placeholder="可搜索昵称或手机号码" value="{$keyword}">
+						<input  class="btn"type="submit" value="搜索">
+						<input   class="btn"type="submit" name="export" value="导出excel" />
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div class="hDiv">
+			<div class="hDivBox">
+				<table cellspacing="0" cellpadding="0">
+					<thead>
+					<tr>
+
+						<th class="sign" axis="col0">
+							<div style="width: 24px;"><i class="ico-check"></i></div>
+						</th>
+						<th align="left" abbr="article_title" axis="col3" class="">
+							<div style="text-align: left; width: 100px;" class="">ID</div>
+						</th>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 200px;" class="">会员资料</div></th>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 200px;" class="">用户地址</div></th>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 100px;" class="">会员类型</div></th>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 150px;" class="">信用额(点击修改)</div></th>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 150px;" class="">折扣(点击修改)</div></th>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 80px;" class="">采购金额</div></th>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 80px;" class="">采购订单</div></th>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 80px;" class="">注册时间</div></th>
+						<th align="center" axis="col1" class="handle">
+							<div style="text-align: center; width: 150px;">操作</div>
+						</th>
+						<th style="width:100%" axis="col7">
+							<div></div>
+						</th>
+					</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+	<!--	<div class="tDiv">
+			<div class="tDiv2">
+				<div class="fbutton">
+					<a href="{:url('center/detail')}">
+						<div class="add" title="新增会员">
+							<span><i class="fa fa-plus"></i>新增会员</span>
+						</div>
+					</a>
+				</div>
+			</div>
+			<div style="clear:both"></div>
+		</div>-->
+		<div class="bDiv" style="height: auto;">
+			<div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+				<table>
+					<tbody>
+					<foreach name="list" item="vo" key="k" >
+						<tr>
+							<td class="sign">
+								<div style="width: 24px;"><i class="ico-check"></i></div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width: 100px;">{$vo.id}</div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width: 200px;"><img src="{$vo.headimage}" style="height: 20px;">{$vo.nickname}-{$vo.mobile}-<eq name="vo.sex" value="1">男<else />女</eq></div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width: 200px;">{$vo.province}{$vo.city}{$vo.county}</div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width: 100px;"><if condition="$vo['type'] eq '1'">
+									注册会员
+									<elseif condition="$vo['type'] eq '2'">
+										股东会员
+										<elseif condition="$vo['type'] eq '3'">
+											经销商
+										<else/>
+										游客
+								</if></div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width: 150px;"><span title="点击可编辑，enter键确认修改"  style="display:block;width: 80px;" class="credit">{$vo.credit}</span><input class="credit_input"  style="width: 80px" type="hidden"  data-id="{$vo.id}" value="{$vo.credit}"></div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width: 150px;"><span title="点击可编辑，enter键确认修改" style="display:block;width: 80px;" class="discount">{$vo.discount}</span><input class="discount_input"  style="width: 80px" type="hidden"  data-id="{$vo.id}" value="{$vo.discount}"></div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width:80px;"><?php echo db("order")->where("uid=".$vo['id']." and status='3'")->sum("price");?></div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width:80px;"><a title="查看订单" href="{:url('order/order_list',array('memberid'=>$vo['id']))}"><?php echo db("order")->where("uid=".$vo['id']." and status='3'")->count();?></a></div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width: 80px;"><if condition="$vo.status eq 1">正常状态<else />停用状态</if></div>
+							</td>
+							<td align="center" class="handle">
+								<div style="text-align: center; width: 170px; max-width:170px;">
+									{$vo['status']}
+									<eq name="$vo['status']" value='1'>
+										<a class="btn red"  href="javascript:void(0)" data-url="{:url('center/setblack')}" data-name="确定拉入黑名单?" data-id="{$vo.id}" onclick="blackfun(this)"><i class="fa fa-trash-o"></i>拉入黑名单</a>
+										<else/>
+										<a class="btn red"  href="javascript:void(0)" data-url="{:url('center/setblack')}" data-id="{$vo.id}" data-name="确定取消黑名单?" onclick="blackfun(this)"><i class="fa fa-trash-o"></i>取消黑名单</a>
+									</eq>
+									<a class="btn red"  href="javascript:void(0)" data-url="{:url('center/del')}" data-id="{$vo.id}" data-name="删除数据无法恢复，并且有可能影响用户体验，确定删除?" onclick="delfun(this)"><i class="fa fa-trash-o"></i>删除</a>
+								</div>
+							</td>
+							<td align="" class="" style="width: 100%;">
+								<div>&nbsp;</div>
+							</td>
+						</tr>
+					</foreach>
+					</tbody>
+				</table>
+			</div>
+			<div class="iDiv" style="display: none;"></div>
+		</div>
+		{$list->render()}
+		<!--分页位置-->
+	</div>
+</div>
+<script>
+	$(document).ready(function(){
+		// 表格行点击选中切换
+		$('#flexigrid > table>tbody >tr').click(function(){
+			$(this).toggleClass('trSelected');
+		});
+		// 点击刷新数据
+		$('.pReload').click(function(){
+			location.href = location.href;
+		});
+		$(".credit").click(function(){
+			$(this).hide();
+			$(this).siblings("input").prop("type","number");
+		});
+		$(".discount").click(function(){
+			$(this).hide();
+			$(this).siblings("input").prop("type","number");
+		});
+		$(".credit_input").keydown(function(e){
+			var ev = document.all ? window.event : e;
+			if (ev.keyCode == 13) {
+				var str = $(this);
+				var id = $(this).data("id");
+				var a = new Number($(this).val());
+				var num = a.toFixed(2);
+				$.post("{:url('center/credit')}", {id: id, num: num}, function (result) {
+					if (result == 1) {
+						str.prop("type", "hidden");
+						str.val(num);
+						str.siblings("span").show();
+						str.siblings("span").html(num);
+					} else {
+						alert('系统繁忙，稍后再试');
+					}
+				});
+
+			}
+		})
+		$(".discount_input").keydown(function(e){
+			var ev = document.all ? window.event : e;
+			if (ev.keyCode == 13) {
+				var str = $(this);
+				var id = $(this).data("id");
+				var a = new Number($(this).val());
+				var num = a.toFixed(2);
+				$.post("{:url('center/discount')}", {id: id, num: num}, function (result) {
+					if (result == 1) {
+						str.prop("type", "hidden");
+						str.val(num);
+						str.siblings("span").show();
+						str.siblings("span").html(num);
+					} else {
+						alert('系统繁忙，稍后再试');
+					}
+				});
+
+			}
+		})
+	});
+	function delfun(obj) {
+		// 删除按钮
+		var confirm=$(obj).attr('data-name');
+		layer.confirm(confirm, {
+			btn: ['确定', '取消'] //按钮
+		}, function () {
+			$.ajax({
+				type: 'post',
+				url: $(obj).attr('data-url'),
+				data : {id:$(obj).attr('data-id')},
+				dataType: 'json',
+				success: function (data) {
+					if (data == 1) {
+						$(obj).parent().parent().parent().remove();
+						layer.closeAll();
+						window.location.reload();
+					} else {
+						layer.alert('操作失败', {icon: 2});  //alert('删除失败');
+					}
+				}
+			})
+		}, function () {
+		});
+	}
+	function blackfun(obj) {
+		// 删除按钮
+		var confirm=$(obj).attr('data-name');
+		layer.confirm(confirm, {
+			btn: ['确定', '取消'] //按钮
+		}, function () {
+			$.ajax({
+				type: 'post',
+				url: $(obj).attr('data-url'),
+				data : {id:$(obj).attr('data-id')},
+				dataType: 'json',
+				success: function (data) {
+					if (data == 1) {
+						window.location.reload();
+					} else {
+						layer.alert('操作失败', {icon: 2});  //alert('删除失败');
+					}
+				}
+			})
+		}, function () {
+		});
+	}
+</script>
+</body>
+</html>
+</html>

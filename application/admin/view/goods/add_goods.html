@@ -1,0 +1,1239 @@
+<include file="Public:header" /> <include file="Public:left" />
+<style>
+	.add_img .img_case{width: 100px;height: 100px;border:1px solid #000;margin: 0 10px 10px 0;}
+	.add_img .img_case img{width: 100%;height:100%;}
+	.add_img .img_case:last-child .ld_close{display:none}
+	.add_img{display: flex;flex-wrap:wrap;margin: 15px 0 0 60px}
+	.sku-atom .textbox .textbox_295{margin:5px 0;}
+
+	.table-sku-stock tr td{border: 1px #139667 solid;margin:5px 5px;padding:10px 10px;}
+	.table-sku-stock thead tr th{border: 1px #139667 solid;margin:5px 5px;padding:10px 10px;}
+	#param-items tr td{margin-top: 10px;}
+	#input-attrvalue{position: fixed;z-index: 1010;border-radius: 2px;-webkit-box-shadow: 0px 1px 6px rgba(0,0,0,0.2);box-shadow: 0px 1px 6px rgba(0,0,0,0.2);}
+</style>
+<div class="flexigrid">
+<div class="mDiv">
+	<div class="ftitle">
+		<h3>编辑商品</h3>
+		<h5><a class="fr" href="javascript:void(0)" onclick="history.go(-1)">返回上一页</a></h5>
+	</div>
+</div>
+</div>
+<form method="post" enctype="multipart/form-data" >
+	<input type="hidden" name="id" />
+	<section>
+		<if condition="$id">
+			<ul class="ulColumn2">
+				<li>
+					<span class="item_name" style="width:120px;">商品标题：</span>
+					<input type="text" name="name"  class="textbox textbox_295" value="{$goods_result.name}"/>
+				</li>
+				<li>
+					<span class="item_name" style="width:120px;">VIN：</span>
+					<input type="text" name="vin"  class="textbox textbox_295" value="{$goods_result.vin}"/>
+				</li>
+				<li>
+					<span class="item_name" style="width:120px;">单位：</span>
+					<input type="text" name="unit"  class="textbox textbox_295" value="{$goods_result.unit}"/>
+				</li>
+				<li>
+					<span class="item_name" style="width:120px;">商品分类：</span>
+
+					<select name="cid" class="cid">
+						<option value="0">请选择商品分类</option>
+						<volist name="goods_category" id="vo">
+							<option value="{$vo.id}" <if condition="$goods_result.cid eq $vo.id">selected</if>>{$vo.name}</option>
+						</volist>
+					</select>
+					<select name="did" class="did">
+						<if condition="$goods_result['did']">
+							<option value="{$goods_result['did']['id']}">{$goods_result['did']['name']}</option>
+							<else/>
+							<option value="0">请选择二级分类</option>
+						</if>
+					</select>
+				</li>
+				<li>
+					<span class="item_name" style="width:120px;">商品品牌：</span>
+
+					<select name="brand">
+						<option value="0">请选择商品品牌</option>
+						<volist name="goods_brand" id="vo">
+							<option value="{$vo.id}" <if condition="$goods_result.brand eq $vo.id">selected</if>>{$vo.name}</option>
+						</volist>
+					</select>
+				</li>
+				<li>
+					<span class="item_name" style="width:120px;">商品状态：</span>
+					<label>
+						<input type="radio" name="is_home"  value='0' <if condition="$goods_result.is_home eq 0">checked="checked"</if>>正常销售
+					</label>
+					<label>
+						<input type="radio" name="is_home"  value='1' <if condition="$goods_result.is_home eq 1">checked="checked"</if>>今日爆款
+					</label>
+				</li>
+				<li>
+					<span class="item_name" style="width:120px;">商品操作：</span>
+					<label>
+						<input type="radio" name="status"  value='1' <if condition="$goods_result.status eq 1">checked="checked"</if>>上架
+					</label>
+					<label>
+						<input type="radio" name="status"  value='0' <if condition="$goods_result.status eq 0">checked="checked"</if>>下架
+					</label>
+				</li>
+				<li>
+					<span class="item_name" style="width:120px;">毛利系数：</span>
+					<label>
+						<input type="radio" name="mao"  value='1' <if condition="$goods_result.mao eq 1">checked="checked"</if>>高毛利
+					</label>
+					<label>
+						<input type="radio" name="mao"  value='0' <if condition="$goods_result.mao eq 0">checked="checked"</if>>低毛利
+					</label>
+					<a href="{:url('set/index')}" target="_blank">前往设置系数</a>
+				</li>
+				<li>
+					<span class="item_name" style="width:120px;">排序：</span>
+					<input type="text" class="textbox textbox_295" name="sort" value="{$goods_result.sort}"/>
+				</li>
+				<li>
+					<span class="item_name" style="width:120px;">养护信息：</span>   <a href="javascript:;" id='add-param' onclick="addParam2()" style="margin-top:10px;" class="btn btn-primary"  title="添加养护信息"><i class='fa fa-plus'></i> 添加养护信息</a>
+
+					<table style="margin-left: 60px;margin-top: 10px;" cellspacing="100" >
+						<tbody id="param-items" >
+						<volist name="goods_result.option" id="vo">
+							<tr>
+								<td style="width:100px;">
+									<a href="javascript:;" class="fa fa-move" title="拖动调整此显示顺序">移动</a>&nbsp;
+									<a href="javascript:;" onclick="deleteParam1(this)"  style="margin-top:10px;" title="删除">删除</a>
+								</td>
+								<td>
+									<input name="key[]" type="text"  style="width:100%"  class="textbox textbox_295" value="{$vo.key}"/>
+								</td>
+								<td>
+									<input name="param[]" type="text"  style="width:100%"  class="textbox textbox_295" value="{$vo.value}"/>
+								</td>
+							</tr>
+						</volist>
+						</tbody>
+					</table>
+				</li>
+				<li>
+					<span class="item_name" style="width:120px;">搭配：</span>   <a href="javascript:;" id='add-option' onclick="addParam3()" style="margin-top:10px;" class="btn btn-primary"  title="添加"><i class='fa fa-plus'></i> 添加</a>
+					<table class="table" cellspacing="100" style="margin-left: 120px;margin-top: 30px;width: 700px;" >
+						<tbody id="model-items" >
+						<tr>
+							<td style="width:100px;">排序操作 </td>	<td>车型</td><td>型号</td><td>排量</td><td>年份</td>
+						</tr>
+						<volist name="goods_result.model" id="vo">
+							<tr class="model_par">
+								<td style="width:100px;">
+
+									<a href="javascript:;" class="fa fa-move" title="拖动调整此显示顺序">移动</a>&nbsp;
+									<a href="javascript:;" onclick="deleteParam1(this)"  style="margin-top:10px;" title="删除">删除</a>
+								</td>
+								<td>
+									<select name="model1[]" style="width:100%"  class="textbox textbox_295 model1" >
+										<volist name="goods_model" id="desa">
+											<option value="{$desa['id']}" <eq name="$desa['id']" value="$vo['model1']['id']">selected</eq> >{$desa['name']}</option>
+										</volist>
+
+									</select>
+								</td>
+								<td>
+									<select name="model2[]" style="width:100%"  class="textbox textbox_295 model2" >
+										<option value="{$vo['model2']['id']}">{$vo['model2']['name']}</option>
+									</select>
+								</td>
+								<td>
+									<select name="model3[]" style="width:100%"  class="textbox textbox_295 model3" >
+										<option value="{$vo['model3']['id']}">{$vo['model3']['name']}</option>
+									</select>
+								</td>
+								<td>
+									<select name="model4[]" style="width:100%"  class="textbox textbox_295 model4" >
+										<option value="{$vo['model4']['id']}">{$vo['model4']['name']}</option>
+									</select>
+								</td>
+							</tr>
+						</volist>
+						</tbody>
+					</table>
+				</li>
+
+
+				<li>
+					<span class="item_name" style="width:120px;">主图上传：</span>
+					<div class="textbox textbox_295" style="width:200px;display: inline-block;">
+						<input type="file" name="goods_image" />
+					</div>
+					<img src="__STATIC__/uploads/{$goods_result.image}" width="100" height="100">
+				</li>
+				<li>
+					<span class="item_name" style="width:120px;">其他图：</span>
+
+					<div class="add_img" >
+						<if condition="$goods_result['images']">
+							<volist name="goods_result.images" id="vo" key="k">
+								<div class="img_case" style="position: relative">
+									<div class="ld_close" style="border-radius: 100px;padding:3px 5px 3px 5px;border: 1px solid red;background: red;color: #fff;position: absolute;z-index: 9999;top:-8px;right: -5px">
+										x
+									</div>
+									<img src="__STATIC__/uploads/{$vo}" class="photoup" />
+									<input type="hidden" name="photo[]" value="{$vo}"/>
+								</div>
+							</volist>
+
+						</if>
+						<div class="img_case" style="position: relative">
+							<img src="__STATIC__/admin/images/add.png" class="photoup" />
+							<input type="file" name="photoname[]" class="photoname" style="display:none;"/>
+						</div>
+					</div>
+				</li>
+				<li>
+					<span class="item_name" style="width:120px;">商品规格：</span>
+					<div class="js-goods-sku control-group" style="margin: 15px 0 0 60px;">
+						<div id="sku-region" class="controls left" style="width:560px;display: inline-block;">
+							<div class="sku-group">
+								<div class="js-sku-list-container">
+									<!-- 商品养护信息一 -->
+									<notempty name="option_category_result[0]['title']">
+										<div class="sku-sub-group attr-title">
+											<h3 class="sku-group-title">
+												<div class="col-lg-5">
+													<select name="attrtitleone" class="form-control">
+														<option value="<if condition="$option_category_result[0]['title']">{$option_category_result[0]['title']}</if>">
+		<if condition="$option_category_result[0]['title']">{$option_category_result[0]['title']}</if></option>
+		</select>
+		<a href="javascript:void(0)" onclick="rmAttrTitle(this)" style="display: inline-block;margin-left: 15px;font-size: 18px;color:black">×</a>
+		</div>
+		</h3>
+
+		<div class="js-sku-atom-container sku-group-cont">
+			<div>
+				<div class="js-sku-atom-list sku-atom-list">
+					<notempty name="attrname">
+						<volist name="attrname" id="attrrow">
+							<div class="sku-atom textbox textbox_295" style="margin:5px 0">
+								<span>{$attrrow['title']}</span>
+								<a href="javascript:void(0)" class="close-modal small js-remove-sku-atom" onclick="rmAttrVal(this, '0')" style="float:right;font-size:20px;color:black">×</a>
+								<input type="hidden" name="option_one[]" value="{$attrrow['title']}">
+							</div>
+						</volist>
+					</notempty>
+				</div>
+				<a href="javascript:;" class="js-add-sku-atom add-sku" style="margin: 15px 0;display: block;" onclick="showAttrValPannel(this)">+添加</a>
+			</div>
+		</div>
+		</div>
+		</notempty>
+		<!-- 商品养护信息一 -->
+
+		<!-- 商品养护信息二 -->
+		<notempty name="option_category_result[1]['title']">
+			<div class="sku-sub-group attr-title">
+				<h3 class="sku-group-title">
+					<div class="col-lg-5">
+						<select name="attrtitletow" class="form-control">
+							<option value="<if condition="$option_category_result[1]['title']">{$option_category_result[1]['title']}</if>"><if condition="$option_category_result[0]['title']">{$option_category_result[1]['title']}</if></option>
+						</select>
+						<a href="javascript:void(0)" onclick="rmAttrTitle(this)" style="display: inline-block;margin-left: 15px;font-size: 18px;color:black">×</a>
+					</div>
+				</h3>
+				<div class="js-sku-atom-container sku-group-cont">
+					<div>
+						<div class="js-sku-atom-list sku-atom-list">
+							<notempty name="attrvalue">
+								<volist name="attrvalue" id="attrvrow">
+									<div class="sku-atom textbox textbox_295" style="margin:5px 0">
+										<span>{$attrvrow['title']}</span>
+										<a href="javascript:void(0)" class="close-modal small js-remove-sku-atom" onclick="rmAttrVal(this, '1')" style="float:right;font-size:20px;color:black">×</a>
+										<input type="hidden" name="option_two[]" value="{$attrvrow['title']}">
+									</div>
+								</volist>
+							</notempty>
+						</div>
+						<a href="javascript:;" class="js-add-sku-atom add-sku" onclick="showAttrValPannel(this)">+添加</a>
+					</div>
+				</div>
+			</div>
+		</notempty>
+
+		<div class="js-sku-group-opts sku-sub-group" <if condition="count($option_category_result) eq 2">style="display:none"</if>>
+		<h3 class="sku-group-title">
+			<button type="button" onclick="addAttrTitle(this)" class="js-add-sku-group btn btn-default" style="width:100px;height:25px">添加规格项目</button>
+		</h3>
+		</div>
+		<input type="hidden" name="delattrname" id="delattrname" value="" />
+		<input id="which-attr" type="hidden" value="" />
+		<input id="batch-type" type="hidden" value="" />
+		</div>
+		</div>
+		<!-- 商品养护信息二 -->
+		</div>
+		</div>
+		<!-- 商品库存 -->
+		<div style="clear: both"></div>
+		<div class="js-goods-stock control-group" style="display:<notempty name="option_category_result">block<else/>none</notempty>;margin: 15px 0 0 60px;" >
+		<table class="table-sku-stock">
+
+			<notempty name="option_category_result">
+				<thead>
+				<tr>
+					<th>{$option_category_result[0]['title']?$option_category_result[0]['title']:'颜色'}</th>
+					<notempty name="attrvalue[0]['title']"><th>{$option_category_result[1]['title']}</th></notempty>
+					<th>销售价格（元）</th>
+					<th>原价价格（元）</th>
+					<!--<th>经销商价格</th>-->
+					<th>库存</th>
+				</tr>
+				</thead>
+				<tbody>
+				<?php $i=0;$f=0;$t=0;?>
+				<foreach name="goods_option_value_result" key="key" id="attrv">
+					<tr>
+						<?php if(isset($attrvalue)){?>
+						<?php if(count($attrvalue) < 1){?>
+						<td rowspan="{$attrvalue_count}">{$attrname[$f]['title']}
+							<input type="hidden" name="attrname[]" value="{$attrname[$f]['title']}">
+						</td>
+						<?php $f++;?>
+						<?php }else{?>
+						<?php if($i == 0 || $i == $attrvalue_count):?>
+						<td rowspan="{$attrvalue_count}">{$attrname[$f]['title']}
+							<input type="hidden" name="attrname[]" value="{$attrname[$f]['title']}">
+						</td>
+						<?php $i=0;?>
+						<if condition="$f<count($attrname)-1">
+							<?php $f++;?>
+						</if>
+						<?php endif;?>
+						<?php }?>
+						<?php }else{?>
+						<td rowspan="1">{$attrname[$f]['title']}
+							<input type="hidden" name="attrname[]" value="{$attrname[$f]['title']}">
+						</td>
+						<?php $f++;?>
+						<?php }?>
+						<notempty name="attrvalue">
+							<?php if($t == $attrvalue_count):?>
+							<?php $t=0;?>
+							<?php endif;?>
+							<td>
+								{$attrvalue[$t]['title']}
+								<input type='hidden' name="attrval[]" value="{$attrvalue[$t]['title']}"/>
+							</td>
+							<?php $t++;?>
+						</notempty>
+						<?php $i++?>
+						<td>
+							<input type="text" name="attroldprice[]" value="{$attrv['oldprice']}" class="form-control js-price input-mini" onkeypress="return isDecimal(this, 2, false, event);" onpaste="return false" oncontextmenu="return false;"></td>
+						<td>
+							<input type="text" name="attrprice[]" value="{$attrv['price']}" class="form-control js-price input-mini" onkeypress="return isDecimal(this, 2, false, event);" onpaste="return false" oncontextmenu="return false;"></td>
+						<td>
+							<input type="text" name="attrtotal[]" value="{$attrv['stock']}" class="form-control js-stock-num input-mini" onkeypress="return isDecimal(this, 2, false, event);" onpaste="return false" oncontextmenu="return false;"></td>
+					</tr>
+				</foreach>
+				</tbody>
+			</notempty>
+			<!-- <tfoot>
+                <tr>
+                    <td colspan="6">
+                        <div class="batch-opts">
+                            批量设置：
+                            <span class="js-batch-type">
+                                <a class="js-batch-price" href="javascript:;" onclick="showBatch(this, 'price')">价格</a>
+                                &nbsp;&nbsp;
+                                <a class="js-batch-stock" href="javascript:;" onclick="showBatch(this, 'store')">库存</a>
+                            </span>
+                            <span class="js-batch-form" style="display: none;">
+                                <input type="text" class="js-batch-txt input-mini" placeholder="">
+                                <a class="js-batch-save" href="javascript:;">保存</a>
+                                <a class="js-batch-cancel" href="javascript:;">取消</a>
+                                <p class="help-desc"></p>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot> -->
+		</table>
+		<div class="clear"></div>
+		</div>
+		<!-- 商品库存 -->
+		</li>
+		<li style="height:auto;">
+			<span class="item_name" style="width:130px;">简介（40字以内）：</span><br>
+			<textarea name="des" id="" style="margin-left: 150px" cols="60" rows="5">{$goods_result.des|htmlspecialchars_decode}</textarea>
+		
+		</li>
+		<li style="height:auto;">
+			<span class="item_name" style="width:120px;">内容：</span>
+			<script id="editor" name="content" type="text/plain" style="width:700px;height:300px;margin-left:125px; margin-top:-12px;">{$goods_result.content|htmlspecialchars_decode}</script>
+		</li>
+		<li>
+			<span class="item_name" style="width:120px;"></span>
+			<input type="hidden" name="id" value="{$id}">
+			<input type="submit" class="link_btn" value="提交" />
+		</li>
+		</ul>
+		<div style="height: 150px;"></div>
+		<else />
+		<ul class="ulColumn2">
+			<li>
+				<span class="item_name" style="width:120px;">商品标题：</span>
+				<input type="text" name="name"  class="textbox textbox_295" value=""/>
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">VIN：</span>
+				<input type="text" name="vin"  class="textbox textbox_295" value=""/>
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">单位：</span>
+				<input type="text" name="unit"  class="textbox textbox_295" value=""/>
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">商品分类：</span>
+
+				<select name="cid" class="cid">
+					<option value="0">请选择商品分类</option>
+					<volist name="goods_category" id="vo">
+						<option value="{$vo.id}">{$vo.name}</option>
+					</volist>
+				</select>
+				<select name="did" class="did">
+					<option value="0">请选择二级分类</option>
+				</select>
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">商品品牌：</span>
+
+				<select name="brand">
+					<volist name="goods_brand" id="vo">
+						<option value="{$vo.id}">{$vo.name}</option>
+					</volist>
+				</select>
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">商品状态：</span>
+				<label>
+					<input type="radio" name="is_home"  value='0' checked>正常销售
+				</label>
+				<label>
+					<input type="radio" name="is_home"  value='1' >今日爆款
+				</label>
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">商品操作：</span>
+				<label>
+					<input type="radio" name="status"  value='1' checked>上架
+				</label>
+				<label>
+					<input type="radio" name="status"  value='0' >下架
+				</label>
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">毛利系数：</span>
+				<label>
+					<input type="radio" name="mao"  value='1' checked>高毛利
+				</label>
+				<label>
+					<input type="radio" name="mao"  value='0' >低毛利
+				</label>
+				<a href="{:url('set/index')}" target="_blank">前往设置系数</a>
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">排序：</span>
+				<input type="text" class="textbox textbox_295" name="sort" value=""/>
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">养护信息：</span>   <a href="javascript:;" id='add-param' onclick="addParam2()" style="margin-top:10px;" class="btn btn-primary"  title="添加养护信息"><i class='fa fa-plus'></i> 添加养护信息</a>
+
+				<table style="margin-left: 60px;margin-top: 10px;" cellspacing="100" >
+					<tbody id="param-items" >
+					</tbody>
+				</table>
+			</li>
+
+			<li>
+				<span class="item_name" style="width:120px;">车型2：</span>   <a href="javascript:;" id='add-option' onclick="addParam3()" style="margin-top:10px;" class="btn btn-primary"  title="添加"><i class='fa fa-plus'></i> 添加</a>
+
+				<table class="table" cellspacing="100" style="margin-left: 120px;margin-top: 30px;width: 700px;" >
+					<tbody id="model-items" >
+					<tr>
+						<td style="width:100px;">排序操作 </td>
+						<td>车型</td>
+						<td>型号</td><td>排量</td><td>年份</td>
+					</tr>
+
+					</tbody>
+				</table>
+			</li>
+
+			<li>
+				<span class="item_name" style="width:120px;">主图上传：</span>
+				<input type="file" name="goods_image" class="textbox textbox_295" />
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">其他图：</span>
+
+				<div class="add_img" >
+					<div class="img_case" style="position: relative">
+						<img src="__STATIC__/admin/images/add.png" class="photoup" />
+						<input type="file" name="photoname[]" class="photoname" style="display:none;"/>
+					</div>
+				</div>
+			</li>
+			<li style="height:auto;">
+				<span class="item_name" style="width:120px;">商品规格：</span>
+				<div class="js-goods-sku control-group" style="margin: 15px 0 0 60px;">
+					<div id="sku-region" class="controls " style="width:560px;display: inline-block;">
+
+						<div class="sku-group">
+							<div class="js-sku-list-container">
+								<div class="js-sku-group-opts sku-sub-group">
+									<h3 class="sku-group-title">
+										<button type="button" onclick="addAttrTitle(this)" class="js-add-sku-group btn btn-default" style="width:100px;height:25px">添加规格项目</button>
+									</h3>
+								</div>
+								<input type="hidden" name="delattrname" id="delattrname" value="" />
+								<input id="which-attr" type="hidden" value="" />
+								<input id="batch-type" type="hidden" value="" />
+							</div>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+				<div style="clear: both"></div>
+				<div class="js-goods-stock control-group" style="margin: 15px 0 0 60px;" style="display:<notempty name="option_category_result">block<else/>none</notempty>;">
+				<table class="table-sku-stock">
+
+				</table>
+				</div>
+			</li>
+			<li style="height:auto;">
+				<span class="item_name" style="width:130px;">简介：</span>
+			<!--	<textarea name="des" id="" style="margin-left: 150px" cols="60" rows="5"></textarea>-->
+				<input type="text" name="des"  class="textbox textbox_295" value=""/>
+			</li>
+			<li style="height:auto;">
+				<span class="item_name" style="width:120px;">内容：</span>
+				<script id="editor" name="content" type="text/plain" style="width:700px;height:300px;margin-left:125px; margin-top:-12px;"></script>
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;"></span>
+				<input type="submit" class="link_btn" value="提交" />
+			</li>
+		</ul>
+		<div style="height: 150px;"></div>
+		</if>
+</form>
+<!--养护信息值添加框-->
+<div id="input-attrvalue" class="popover bottom popover-chosen-wrap" style="display:none;">
+	<div class="arrow"></div>
+	<div class="popover-inner popover-chosen">
+		<div class="popover-content" style="height:30px">
+			<input type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="select2-input select2-default select2-search-field" tabindex="-1" style="width: 200px;font-size:16px;height: 100%;" />
+			<button type="button" class="btn btn-primary js-btn-confirm" data-loading-text="确定" onclick="addAttrVal(this)" style="height:35px">确定</button>
+			<button type="button" class="btn btn-default js-btn-cancel" onclick="hideAttrValPannel(this)" style="height:35px">取消</button>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="__STATIC__/admin/js/jquery-ui-1.10.3.min.js"></script>
+<script type="text/javascript">
+	function addParam3() {
+		$.ajax({
+			"url": "{:url('goods/posttpl')}",
+			data:{},
+			success: function(data) {
+				$('#model-items').append(data);
+			}
+		});
+		return;
+	}
+	//点击检测是否填写价格
+	$(".link_btn").click(function(){
+		//检测成本价
+		if(!is_input($("input[name='attroldprice[]']"))){
+			alert('请填写成本价');
+			return false;
+		}
+
+		//检测价格
+		if(!is_input($("input[name='attrprice[]']"))){
+			alert('请填写商品价格');
+			return false;
+		}
+
+		//检测是否填写库存
+		if(!is_input($("input[name='attrtotal[]']"))){
+			alert('请填写商品库存');
+			return false;
+		}
+
+		//检测是否选择商品分类
+		var cat_name_val = $("select[name='cid']").val();
+		if(cat_name_val == '0'){
+			alert('请选择商品分类');
+			return false;
+		}
+
+		//检测是否选择商品规格
+		var attrname_val = $("input[name='attrname[]']").val();
+		if(typeof attrname_val == "undefined"){
+			alert('请选择商品规格');
+			return false;
+		}
+
+		//检测是否填写商品标题
+		var name_val = $("input[name='name']").val();
+
+		if(name_val == ""){
+			alert('请填写商品标题');
+			return false;
+		}
+	});
+
+	function is_input(obj){
+		var bool = true;
+		obj.each(function(){
+			var val = $(this).val();
+			if(val == ''){
+				bool = false;
+				$(this).focus();
+				return false;
+			}
+		});
+
+		return bool
+	}
+
+	$(function() {
+		$("#param-items").sortable({handle: '.fa-move'});
+	})
+</script>
+<script type="text/javascript">
+
+
+	function addParam2() {
+		$.ajax({
+			"url": "{:url('goods/tpl')}",
+			success: function(data) {
+				$('#param-items').append(data);
+			}
+		});
+		return;
+	}
+
+	//
+	function deleteParam1(o) {
+		$.ajax({
+			"url": "{:url('goods/tpl')}",
+			success: function(data) {
+				$(o).parent().parent().remove();
+			}
+		});
+		return;
+
+	}
+
+	function PreviewImage(imgFile) {
+
+		var filextension = imgFile.value.substring(imgFile.value.lastIndexOf("."), imgFile.value.length);
+		filextension = filextension.toLowerCase();
+		if ((filextension != '.jpg') && (filextension != '.gif')
+				&& (filextension != '.jpeg') && (filextension != '.png')
+				&& (filextension != '.bmp')) {
+			alert("对不起，系统仅支持标准格式的照片，请您调整格式后重新上传，谢谢 !");
+			imgFile.focus();
+		} else {
+			var path;
+			path = window.URL.createObjectURL(imgFile.files[0]);// FF 7.0以上
+			$(imgFile).parent(".img_case").append('<div class="ld_close" style="border-radius: 100px;padding:3px 5px 3px 5px;border: 1px solid red;background: red;color: #fff;position: absolute;z-index: 9999;top:-8px;right: -5px">x</div>');
+
+			$(imgFile).siblings("img").attr("src",path);
+			//   alert($(imgFile).parent(".img_case").html());
+			$(".add_img").append('<div class="img_case"  style="position: relative"><div class="ld_close" style="border-radius: 100px;padding:3px 5px 3px 5px;border: 1px solid red;background: red;color: #fff;position: absolute;z-index: 9999;top:-8px;right: -5px">x</div> <img src="__STATIC__/admin/images/add.png" class="photoup" /><input type="file" name="photoname[]" class="photoname" style="display:none;"/></div>');
+		}
+	}
+
+	$(document).on("change",'.photoname',function(){
+		PreviewImage(this);
+	});
+
+	//上传图片
+	$(document).on("click",'.photoup',function(){
+		$(this).siblings("input").trigger("click");
+	});
+
+	//删除图片
+	$(document).on("click",'.ld_close',function(){
+		if(confirm('确定删除图片吗？')){
+			$(this).parent('.img_case').remove()
+		}
+	});
+
+	//实例化编辑器
+	//建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+	var ue = UE.getEditor('editor');
+
+	function isFocus(e) {
+		alert(UE.getEditor('editor').isFocus());
+		UE.dom.domUtils.preventDefault(e)
+	}
+
+	function setblur(e) {
+		UE.getEditor('editor').blur();
+		UE.dom.domUtils.preventDefault(e)
+	}
+
+	function insertHtml() {
+		var value = prompt('插入html代码', '');
+		UE.getEditor('editor').execCommand('insertHtml', value)
+	}
+
+	function createEditor() {
+		enableBtn();
+		UE.getEditor('editor');
+	}
+</script>
+<!-- 商品养护信息数据 -->
+<script>
+	//养护信息全局数组
+	var attrArr = [];
+	attrArr["key"] = [];
+	attrArr["value"] = [];
+
+	//养护信息标题
+	<?php
+	if(isset($option_category_result)){
+		$a = array();
+		foreach($option_category_result as $key=>$val){
+			$a[]=$val['title'];
+		}
+		echo 'attrArr["key"] = '.json_encode($a).';';
+	}
+	?>
+
+
+	//养护信息一
+	<?php
+	if(isset($attrname)){
+		$attrNames=array();
+		foreach ($attrname as $key => $val) {
+			$nameIds[]=$val['id'];
+			$attrNames[]=$val['title'];
+		}
+		echo 'attrArr["value"][0] = '.json_encode($attrNames).';';
+		echo 'var nameIds = "' .implode(',', $nameIds).'";';
+		echo '$(function () {
+		$("#delattrname").val(nameIds);
+	});';
+	}
+	?>
+
+	//养护信息二
+	<?php
+	if(isset($attrvalue)){
+		$attrVals=array();
+		foreach($attrvalue as $key=>$val){
+			$attrVals[]=$val['title'];
+		}
+		$attrVals=array_unique($attrVals);
+		echo 'attrArr["value"][1] = '.json_encode($attrVals).';';
+	}
+	?>
+
+
+
+	//添加养护信息
+	function addAttrTitle(obj) {
+		var attrNum = $(".attr-title").length;
+		if(attrNum < 2) {
+			var html = '<div class="sku-sub-group attr-title ">';
+			html += '<h3 class="sku-group-title " style="display: flex;display: -webkit-flex;align-items: center;-webkit-align-items: center;margin-bottom: 15px;">';
+			html +='<div class="col-lg-5">';
+
+			if(attrNum < 1) {
+				html += '<select name="attrtitleone" class="form-control" onchange="attrchange(this)" initializeAttr="no">';
+			} else {
+				html += '<select name="attrtitletow" class="form-control" onchange="attrchange(this)" initializeAttr="no">';
+			}
+			html +='</select>';
+			html +='<a href="javascript:void(0)" onclick="rmAttrTitle(this)" style="display: inline-block;margin-left: 15px;font-size: 18px;color:black">×</a>';
+			html +='</div>';
+
+
+
+			html += '<div class="js-sku-atom-container sku-group-cont col-lg-5">';
+			html += '<div>';
+			html += '<div class="js-sku-atom-list sku-atom-list" ></div>';
+			html += '<a href="javascript:;" class="js-add-sku-atom add-sku" style="margin-left: 15px;" onclick="showAttrValPannel(this)">+添加</a>';
+			html += '</div>';
+			html += '</div>';
+			html += '</h3>';
+
+			$(html).insertBefore($(obj).parent().parent());
+
+			if(attrNum < 1) {
+				initializeAttr("select[name='attrtitleone']");
+			} else {
+				initializeAttr("select[name='attrtitletow']");
+
+			}
+			//隐藏添加养护信息按钮
+			if($(".attr-title").length >= 2) {
+				$(".js-sku-group-opts").hide();
+			}
+
+			//显示表格
+			if($(".attr-title").length > 0) {
+				$(".js-goods-stock").show();
+			}
+
+			//数组增加养护信息
+			attrArr["key"][attrNum] = "";
+
+			$(".totalgoods").hide();
+
+			//生成表格
+			$(".table-sku-stock").html(createTable(attrArr));
+			attrtotalonbin();
+		} else {
+			alert("只能添加两个规格项目！");
+		}
+	}
+
+	//删除养护信息
+	function rmAttrTitle(obj) {
+		var attrname = $(obj).parent().find("select").attr('name');
+		if(attrname == 'attrtitleone'){
+			$(".attr-title").remove();
+			//数组减少养护信息
+			attrArr["key"]=[];
+			attrArr["value"] = [];
+		}else{
+			$(obj).parent().parent("h3").parent("div").remove();
+			$("#select2-drop").hide();
+			//数组减少养护信息
+			attrArr["key"].splice(1,1);
+			attrArr["value"].splice(1,1);
+		}
+
+		//console.log(attrArr);
+
+		//少于两个养护信息
+		if($(".attr-title").length < 2) {
+			$(".js-sku-group-opts").show();
+		}
+		//隐藏表格
+		if($(".attr-title").length < 1) {
+			$(".js-goods-stock").hide();
+			$(".totalgoods").show();
+		}
+		//生成表格
+		$(".table-sku-stock").html(createTable(attrArr));
+		attrtotalonbin();
+	}
+
+	//商品养护信息类型切换
+	function attrchange(obj){
+		var name = $(obj).attr('name');
+
+		var attrTitle = $(obj).find("option:selected").val();
+
+		if(attrArr["key"].length > 1 && $.inArray(attrTitle, attrArr["key"]) > -1) {
+			alert("两个商品规格名称不能相同！");
+			return false;
+		}
+
+		if(name == 'attrtitletow'){
+			attrArr["key"][1] = attrTitle;
+		}else{
+			attrArr["key"][0] = attrTitle;
+		}
+		//生成表格
+		$(".table-sku-stock").html(createTable(attrArr));
+		attrtotalonbin();
+	}
+
+	//初始商品养护信息标题
+	initializeAttr("select[name='attrtitleone']");
+	initializeAttr("select[name='attrtitletow']");
+
+	function initializeAttr(obj){
+		var initattr = $(obj).attr('initializeAttr');
+		if(initattr == 'yes'){
+			return false;
+		}
+
+		//生成选择框下拉列表
+		var property = <?php echo json_encode(array('规格','容量'));?>;
+
+		var html = '';
+		var i;
+
+		var olevalue = $(obj).val();
+
+		for(i in property) {
+			if(olevalue == property[i] ){
+				html += '<option selected="selected" valuel="'+property[i]+'">'+property[i]+'</option>';
+			}else{
+				html += '<option valuel="'+property[i]+'">'+property[i]+'</option>';
+			}
+		}
+		var fhtml = "<option valuel='0'>请先选择商品规格</option>";
+		$(obj).html(fhtml+html);
+		$(obj).attr('initializeAttr','yes');
+	}
+
+
+	//显示添加养护信息值面板
+	function showAttrValPannel(obj) {
+		//判断有没有选择商品规格
+		if($(obj).parent().parent().parent().find('select[name="attrtitleone"]').val() == '请先选择商品规格'){
+			alert('请先选择商品规格');
+			return false;
+		}
+
+		if($(obj).parent().parent().parent().find('select[name="attrtitletow"]').val() == '请先选择商品规格'){
+			alert('请先选择商品规格');
+			return false;
+		}
+
+		if($(obj).parent().parent().parent().find('select[name="attrtitleone"]').val()){
+			$("#input-attrvalue").attr('option_name','option_one');
+		}else{
+			$("#input-attrvalue").attr('option_name','option_two');
+		}
+
+		$("#input-attrvalue").show().css({"top":($(obj).offset().top+$(obj).height()),"left":$(obj).offset().left-$("#input-attrvalue").width()/2+$(obj).width()/2});
+		var attr_index = $(obj).parent().parent().parent().index();
+
+		$("#which-attr").val(attr_index);
+	}
+
+
+	//商品规格库存变动， 总库存也变动
+	$(function () {
+		$(".js-stock-num").change(function () {
+			var total = 0;
+			$(".js-stock-num").each(function () {
+				total += parseInt($(this).val());
+			});
+			$("#total").val(total);
+		});
+
+		$("input[name ^='attrtotal['").on('blur',function(){
+			var total = 0;
+			$("input[name ^='attrtotal['").each(function(){
+				total += $(this).val() ? parseInt($(this).val()) : 0;
+			});
+			$("#total").val(total);
+		});
+	});
+
+
+	//添加养护信息活着更改养护信息都绑定养护信息total失去焦点
+	function attrtotalonbin(){
+		$("input[name ^='attrtotal['").on('blur',function(){
+			var total = 0;
+			$("input[name ^='attrtotal['").each(function(){
+				total += $(this).val() ? parseInt($(this).val()) : 0;
+			});
+			$("#total").val(total);
+		});
+	}
+
+
+	//变换数组
+	function transArr(arr) {
+		var trans_arr = [];
+		trans_arr["key"] = [];
+		trans_arr["value"] = [];
+
+		var p,q;
+		var i=0;
+		for(p in arr) {
+			trans_arr["key"][i] = p;
+			for(q in arr[p]) {
+				trans_arr["value"][i] = arr[p];
+			}
+			i++;
+		}
+		return trans_arr;
+	}
+
+
+	//生成表格
+	function createTable(arr) {
+		//表格标题
+		var thead = '<thead>';
+		thead += '<tr>';
+		var k;
+
+		for(k in arr["key"]) {
+			if((arr["value"][0] != undefined && arr['key'][k] != '' && arr['value'][k] != undefined) && arr['value'][k].length >0) {
+				thead += '<th>'+arr["key"][k]+'</th>';
+			}
+		}
+		thead += '<th class="th-price">成本价格（元）</th>';
+		thead += '<th class="th-price">价格（元）</th>';
+		thead += '<th class="th-stock">库存</th>';
+		// thead += '<th class="th-code">商家编码</th>';
+		thead += '</tr>';
+		thead += '</thead>';
+
+		//表格主体
+		var i,j;
+		var tbody = '<tbody>';
+
+		var tbody_other = '<td>';
+		tbody_other += '<input type="text"  name="attroldprice[]"  value="" class="form-control js-price input-mini" onkeypress="return isDecimal(this, 2, false, event);" onpaste="return false" oncontextmenu="return false;"/>';
+		tbody_other += '</td>';
+		tbody_other += '<td>';
+		tbody_other += '<input type="text"  name="attrprice[]"  value="" class="form-control js-price input-mini" onkeypress="return isDecimal(this, 2, false, event);" onpaste="return false" oncontextmenu="return false;"/>';
+		tbody_other += '</td>';
+		tbody_other += '<td>';
+		tbody_other += '<input type="text"  name="attrtotal[]"  value="" class="form-control js-stock-num input-mini" onkeypress="return isDecimal(this, 2, false, event);" onpaste="return false" oncontextmenu="return false;"/>';
+		tbody_other += '</td>';
+
+		// tbody_other += '<td>';
+		// tbody_other += '<input type="text"  name="attrgoodssn[]"  value="" class="form-control js-code input-small" />';
+		// tbody_other += '</td>';
+
+		for(i in arr['value'][0]) {
+
+			if((arr['key'][1] && arr['value'][1] != undefined && arr['key'][1] != '') && arr['value'][1].length>0) {
+
+				for(j in arr['value'][1]) {
+					tbody += '<tr>';
+
+					if(j == 0) {
+						tbody += '<td rowspan="'+arr['value'][1].length+'">';
+						tbody += arr['value'][0][i];
+						tbody += '<input type="hidden" value="'+arr['value'][0][i]+'" name="attrname[]"/>';
+						tbody += '</td>';
+					}
+
+					tbody += '<td>';
+					tbody += arr['value'][1][j];
+					tbody += '<input type="hidden" name="attrval[]" value="'+arr['value'][1][j]+'" />';
+					tbody += '</td>';
+					tbody += tbody_other;
+					tbody += '</tr>';
+				}
+			} else {
+
+				tbody += '<tr>';
+				tbody += '<td>';
+				tbody += arr['value'][0][i];
+				tbody += '<input type="hidden" value="'+arr['value'][0][i]+'" name="attrname[]"/>';
+				tbody += '</td>';
+				tbody += tbody_other;
+				tbody += '</tr>';
+			}
+		}
+		tbody += '</tbody>';
+
+		// var tfoot = '<tfoot>';
+		// tfoot += '<tr>';
+		// tfoot += '<td colspan="6">';
+		// tfoot += '<div class="batch-opts">';
+		// tfoot += '批量设置：';
+		// tfoot += '<span class="js-batch-type">';
+		// tfoot += '<a class="js-batch-price" href="javascript:;" onclick="showBatch(this, \'price\')">价格</a>';
+		// tfoot += '&nbsp;&nbsp;';
+		// tfoot += '<a class="js-batch-stock" href="javascript:;" onclick="showBatch(this, \'store\')">库存</a>';
+		// tfoot += '</span>';
+		// tfoot += '</div>';
+		// tfoot += '</td>';
+		// tfoot += '</tr>';
+		// tfoot += '</tfoot>';
+
+		var html = '';
+		html += thead;
+		html += tbody;
+		//html += tfoot;
+
+		return html;
+	}
+
+
+</script>
+<!-- 商品养护信息数据 -->
+
+<!-- 添加养护信息操作 -->
+<script>
+
+	//隐藏添加养护信息值面板
+	function hideAttrValPannel(obj) {
+		$("#input-attrvalue").hide();
+	}
+
+	//添加养护信息值至页面
+	function addAttrVal(obj) {
+		var attrValue = $(obj).prev().val();
+		var option_name = $(obj).parent().parent().parent().attr('option_name');
+
+		if(attrValue == '') {
+			return false;
+		}
+		var atom_index = $("#which-attr").val();
+		if($.inArray(attrValue, attrArr["value"][atom_index]) > -1) {
+			alert("请不要重复添加养护信息值！");
+			return false;
+		}
+
+		var atom_id = ((attrArr["value"][atom_index] != undefined)? attrArr["value"][atom_index].length : 0);
+
+		//添加养护信息值
+		var html = '<div class="sku-atom textbox textbox_295" style="margin:5px 0">';
+		html += '<span>'+attrValue+'</span>';
+		html += '<a href="javascript:void(0)" class="close-modal small js-remove-sku-atom" onclick="rmAttrVal(this, \''+atom_index+'\')" style="float:right;font-size:20px;color:black">×</a>';
+		html += '<input type="hidden" name="'+option_name+'[]" value='+attrValue+'>';
+		html += '</div>';
+
+		$(".sku-atom-list").eq(atom_index).append(html);
+		$("#input-attrvalue").children().find("input").val();
+		$(obj).prev().val('');
+		$("#input-attrvalue").hide();
+
+		//数组添加养护信息值
+		if(attrArr["value"][atom_index] == undefined) {
+			attrArr["value"][atom_index] = [attrValue];
+		} else {
+			attrArr["value"][atom_index][$(".sku-atom-list").eq(atom_index).children().length-1] = attrValue;
+		}
+
+		//生成表格
+		$(".table-sku-stock").html(createTable(attrArr));
+		attrtotalonbin();
+	}
+
+	//删除养护信息值
+	function rmAttrVal(obj, attr_index) {
+		$(obj).parent().remove();
+		var i;
+		var index;
+		for(i in attrArr["value"][attr_index]) {
+			if(attrArr["value"][attr_index][i] == $(obj).prev().html()) {
+				index = i;
+			}
+		}
+		attrArr["value"][attr_index].splice(index, 1);
+		//生成表格
+		$(".table-sku-stock").html(createTable(attrArr));
+		attrtotalonbin();
+	}
+</script>
+<!-- 添加养护信息操作 -->
+
+<!-- 批量调价 -->
+<script>
+	//批量填充数据
+	function showBatch(obj, type) {
+		$("#input-batch").show().css({"top":$(obj).offset().top+$(obj).height(),"left":$(obj).offset().left-$("#input-attrvalue").width()/2+$(obj).width()/2});
+		$("#batch-type").val(type);
+	}
+
+	//确认批量添加
+	function confirmBatch(obj) {
+		//console.log($("#batch-type").val());
+		switch($("#batch-type").val()) {
+			case 'price': {
+				var price = parseFloat($(obj).prev().val());
+				$(".js-price").val(price);
+			};break;
+			case 'store': {
+				var store = parseInt($(obj).prev().val());
+				$(".js-stock-num").val(store);
+				var total = 0;
+				$(".js-stock-num").each(function () {
+					total += parseInt($(this).val());
+				});
+				$("#total").val(total);
+			};break;
+		}
+		$(obj).prev().val('');
+		$("#input-batch").hide();
+	}
+
+	//隐藏添加框
+	function hideBatchPannel(obj) {
+		$("#input-batch").hide();
+	}
+
+	//验证金钱
+	function isDecimal(txtValue, num, canNegative, event) {
+		var whichCode = event.keyCode || event.which;
+		if (whichCode == 8 || whichCode == 37 || whichCode == 39) {
+			return true;
+		}
+		var key = String.fromCharCode(whichCode);
+		var txt = txtValue.value;
+		var numberString = txt.split('.');
+		var pos = txt.indexOf('.');
+		var inputPos = txtValue.value.length;
+		if (key == '-') {
+			if (inputPos > 0) {
+				return false;
+			}
+		}
+		if (key == '.') {
+			if (inputPos == 0) {
+				return false;
+			}
+		}
+		if (pos > -1) {
+			if (inputPos > pos) {
+				var endstr = txt.substring(pos + 1);
+				if (endstr.length >= num) {
+					return false;
+				}
+			}
+		}
+
+		//不能输入两个以上.
+		if (pos > -1 && key == '.') {
+			return false;
+		}
+		//不能输入两个以上-
+		pos = txt.indexOf('-');
+		if (pos > -1 && key == '-') {
+			return false;
+		}
+		if (canNegative) {
+			objRegExp = /^(-)?[\d\.]*$/;
+		}
+		else {
+			objRegExp = /^[\d\.]*$/;
+		}
+		return objRegExp.test(key);
+	}
+	$(".model1").change(function(){
+		var that=$(this).parents(".model_par");
+		$.post("{:url('goods/model2')}",{pid:$(this).val()},function(result){
+			that.find(".model2").html(result)
+		});
+	});
+	$(".model2").change(function(){
+		var that=$(this).parents(".model_par");
+		$.post("{:url('goods/model3')}",{pid:$(this).val()},function(result){
+			that.find(".model3").html(result)
+		});
+	});
+	$(".model3").change(function(){
+		var that=$(this).parents(".model_par");
+		$.post("{:url('goods/model4')}",{pid:$(this).val()},function(result){
+			that.find(".model4").html(result)
+		});
+	});
+	$(".cid").change(function(){
+		$.post("{:url('goods/cate')}",{pid:$(this).val()},function(result){
+			$(".did").html(result)
+		});
+	});
+</script>
+</body>
+
+</html>

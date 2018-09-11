@@ -1,0 +1,192 @@
+<include file="public:header"/>
+<!--aside nav-->
+<include file="public:left"/>
+
+<h2><strong style="color:grey;">网站基本信息</strong></h2>
+<div class="cont_col_lt mCustomScrollbar" style="height:auto; width:100%; float:left; margin-bottom:20px;">
+	<table class="table fl">
+		<tr>
+			<td class="center" style="width:20%;">今日注册会员</td>
+			<td class="center">昨日注册会员</td>
+			<td class="center">一周注册会员</td>
+			<td class="center">一月注册会员</td>
+			<td class="center">全部注册会员</td>
+		</tr>
+		<tr>
+			<td class="center">{$member['today']}</td>
+			<td class="center">{$member['yesterday']}</td>
+			<td class="center">{$member['week']}</td>
+			<td class="center">{$member['month']}</td>
+			<td class="center">{$member['all']}</td>
+		</tr>
+		<tr>
+			<td class="center" style="width:20%;">今日订单</td>
+			<td class="center">昨日订单</td>
+			<td class="center">一周订单</td>
+			<td class="center">一月订单</td>
+			<td class="center">全部订单</td>
+		</tr>
+		<tr>
+			<td class="center">{$order['today']}</td>
+			<td class="center">{$order['yesterday']}</td>
+			<td class="center">{$order['week']}</td>
+			<td class="center">{$order['month']}</td>
+			<td class="center">{$order['all']}</td>
+		</tr>
+	</table>
+
+</div>
+
+
+<!--    <h2><strong style="color:grey;">快捷按钮</strong></h2>
+    <a class="link_btn" href="{:url('Set/topic')}"style="width:120px; height:120px; line-height:120px; text-align:center; border-radius:5px; font-size:16px; margin-right:15px; margin-bottom:15px;">基本设置</a>
+    <a class="link_btn" href="{:url('Admin/li')}" style="width:120px; height:120px; line-height:120px; text-align:center; border-radius:5px; font-size:16px; margin-right:15px; margin-bottom:15px;">管理员列表</a>
+    <a class="link_btn" href="{:url('Article/index')}"  style="width:120px; height:120px; line-height:120px; text-align:center; border-radius:5px; font-size:16px; margin-right:15px; margin-bottom:15px;">文章列表</a>
+    <a class="link_btn" href="{:url('Article/lists')}" style="width:120px; height:120px; line-height:120px; text-align:center; border-radius:5px; font-size:16px; margin-right:15px; margin-bottom:15px;">动态列表</a>
+    <a class="link_btn" href="{:url('Article/qlist')}" style="width:120px; height:120px; line-height:120px; text-align:center; border-radius:5px; font-size:16px; margin-right:15px; margin-bottom:15px;">问题列表</a>
+    <a class="link_btn" href="{:url('center/member')}" style="width:120px; height:120px; line-height:120px; text-align:center; border-radius:5px; font-size:16px; margin-right:15px; margin-bottom:15px;">会员列表</a>-->
+<!--<button class="link_btn" id="showPopTxt">测试弹出框</button>
+<input type="button" value="按钮input" class="link_btn"/>-->
+
+
+<script src="__STATIC__/admin/js/highcharts.js"></script>
+<script src="__STATIC__/admin/js/highcharts-3d.js"></script>
+<script src="__STATIC__/admin/js/exporting.js"></script>
+<style type="text/css">
+	#container1 {
+		min-width: 1280px;
+		max-width: 1280px;
+		height: auto;
+		float:left;
+	}
+	#container2 {
+		min-width: 1280px;
+		max-width: 1280px;
+		float:left;
+	}
+</style>
+
+<ul class="admin_tab">
+	<li><a class="active">订单销售情况</a></li>
+	<li><a>会员注册情况</a></li>
+</ul>
+<!--tabCont-->
+<div class="admin_tab_cont" style="display:block;">
+	<div id="container1"></div>
+</div>
+<div class="admin_tab_cont"><div id="container2"></div></div>
+
+</section>
+
+
+
+
+
+<!--tabStyle-->
+<script>
+	$(document).ready(function(){
+		//tab
+		$(".admin_tab li a").click(function(){
+			var liindex = $(".admin_tab li a").index(this);
+			$(this).addClass("active").parent().siblings().find("a").removeClass("active");
+			$(".admin_tab_cont").eq(liindex).fadeIn(150).siblings(".admin_tab_cont").hide();
+
+		});
+	});
+</script>
+
+
+
+<script type="text/javascript">
+
+	// 订单销售情况
+	var chart = new Highcharts.Chart({
+		chart: {
+			renderTo: 'container1',
+			type: 'column',
+			options3d: {
+				enabled: true,
+				alpha: 0,
+				beta: 0,
+				depth: 60,
+				viewDistance: 8
+			}
+		},
+		title: {
+			text: '订单销售情况'
+		},
+		subtitle: {
+			text: '近10天的订单销售情况如下'
+		},
+		plotOptions: {
+			column: {
+				depth: 25
+			}
+		},
+		xAxis: {
+			categories: {$date}// ['12号', '13号', '14号', '15号', '16号', '17号', '18号', '19号', '20号', '21号']
+		},
+		yAxis: {
+			title: {
+				text: null
+			}
+		},
+		series: [{
+			name: '订单量',
+			data:{$num}// [2, 2, 3, 4, 5, 3, 6, 4, 2, 3]
+		}]
+	});
+
+
+
+
+</script>
+
+
+<script type="text/javascript">
+
+	// 会员注册情况
+	var chart = new Highcharts.Chart({
+		chart: {
+			renderTo: 'container2',
+			type: 'column',
+			options3d: {
+				enabled: true,
+				alpha: 0,
+				beta: 0,
+				depth: 60,
+				viewDistance: 8
+			}
+		},
+		title: {
+			text: '会员注册情况'
+		},
+		subtitle: {
+			text: '近10天的会员注册情况如下'
+		},
+		plotOptions: {
+			column: {
+				depth: 25
+			}
+		},
+		xAxis: {
+			categories: {$date}
+		},
+		yAxis: {
+			title: {
+				text: null
+			}
+		},
+		series: [{
+			name: '注册量',
+			data: {$user}
+		}]
+	});
+
+</script>
+
+
+</div>
+</section>
+</body>
+</html>

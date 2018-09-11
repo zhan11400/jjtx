@@ -1,0 +1,189 @@
+<include file="public/header" />
+<include file="public/left" />
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+	<div class="flexigrid">
+
+		<div class="mDiv">
+			<div class="ftitle">
+				<h3>代理商列表</h3>
+				<h5>(共{$count}条记录)</h5>
+			</div>
+			<div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+			<form class="navbar-form form-inline" action="" method="get">
+				<div class="sDiv">
+					<div class="sDiv2">
+						代理商状态：<select name="status" id="cat_id" class="select">
+						<option value="">全部状态</option>
+						<option value="0"  <eq name="status" value="0">selected </eq>>停用状态</option>
+						<option value="1"  <eq name="status" value="1">selected </eq>>正常状态</option>
+					</select>
+						<input type="text" size="30" name="keyword" class="qsbox" placeholder="搜索相关数据..." value="{$keyword}">
+						<input type="submit" class="btn" value="搜索">
+						<input type="submit" name="export" class="btn" value="导出">
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div class="hDiv">
+			<div class="hDivBox">
+				<table cellspacing="0" cellpadding="0">
+					<thead>
+					<tr>
+
+
+
+						<th class="sign" axis="col0">
+							<div style="width: 24px;"><i class="ico-check"></i></div>
+						</th>
+						<th align="left" abbr="article_title" axis="col3" class="">
+							<div style="text-align: left; width: 100px;" class="">ID</div>
+						</th>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 200px;" class="">代理商</div></th>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 200px;" class="">真实姓名</div></th>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 100px;" class="">手机号码</div></th>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 200px;" class="">注册时间</div></th>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 80px;" class="">卖出金额</div></th>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 80px;" class="">卖出订单</div></th>
+							<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 80px;" class="">客户数</div></th>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 80px;" class="">毛利</div></th>
+						<th align="left" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: left; width: 80px;" class="">状态</div></th>
+						<th align="center" axis="col1" class="handle">
+							<div style="text-align: center; width: 150px;">操作</div>
+						</th>
+						<th style="width:100%" axis="col7">
+							<div></div>
+						</th>
+					</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+		<div class="tDiv">
+			<div class="tDiv2">
+				<div class="fbutton">
+					<a href="{:url('center/add')}">
+						<div class="add" title="新增代理商">
+							<span><i class="fa fa-plus"></i>新增代理商</span>
+						</div>
+					</a>
+				</div>
+			</div>
+			<div style="clear:both"></div>
+		</div>
+		<div class="bDiv">
+			<div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+				<table>
+					<tbody>
+					<foreach name="list" item="vo" key="k" >
+						<tr>
+							<td class="sign">
+								<div style="width: 24px;"><i class="ico-check"></i></div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width: 100px;">{$vo.id}</div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width: 200px;">{$vo.name}</div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width: 200px;">{$vo.realname}</div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width: 100px;">{$vo.mobile}</div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width: 200px;">{$vo.create_time|date="Y-m-d H:i:s",###}</div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width:80px;"><?php echo db("order")->where("agentid=".$vo['id']." and status='3'")->sum("price");?></div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width:80px;"><a title="查看订单" href="{:url('order/order_list',array('agentid'=>$vo['id']))}"><?php echo db("order")->where("agentid=".$vo['id']." and status='3'")->count();?></a></div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width:80px;"><a title="查看客户" href="{:url('center/member',array('agentid'=>$vo['id']))}"><?php echo db("member")->where("agent=".$vo['id'])->count();?></a></div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width:80px;"><a title="查看毛利表" href="{:url('center/main',array('agentid'=>$vo['id']))}"><?php echo db("order")->where("agentid=".$vo['id']." and status='3'")->sum('price')-db("order")->where("agentid=".$vo['id']." and status='3'")->sum('costprice');?></a></div>
+							</td>
+							<td align="left" class="">
+								<div style="text-align: left; width: 80px;"><if condition="$vo.status eq 1">正常状态<else />停用状态</if></div>
+							</td>
+							<td align="center" class="handle">
+								<div style="text-align: center; width: 170px; max-width:170px;">
+									<a class="btn red" href="{:url('center/add',array('id'=>$vo['id']))}">编辑</a>
+									{$vo['status']}
+									<eq name="$vo['status']" value='1'>
+										<a class="btn red"  href="javascript:void(0)" data-url="{:url('center/setagentblack')}" data-name="确定拉入黑名单?" data-id="{$vo.id}" onclick="delfun(this)"><i class="fa fa-trash-o"></i>拉入黑名单</a>
+									<else/>
+										<a class="btn red"  href="javascript:void(0)" data-url="{:url('center/setagentblack')}" data-id="{$vo.id}" data-name="确定取消黑名单?" onclick="delfun(this)"><i class="fa fa-trash-o"></i>取消黑名单</a>
+									</eq>
+								</div>
+							</td>
+							<td align="" class="" style="width: 100%;">
+								<div>&nbsp;</div>
+							</td>
+						</tr>
+					</foreach>
+					</tbody>
+				</table>
+			</div>
+			<div class="iDiv" style="display: none;"></div>
+		</div>
+		{$list->render()}
+
+		<!--分页位置-->
+	</div>
+</div>
+<script>
+	$(document).ready(function(){
+		// 表格行点击选中切换
+		$('#flexigrid > table>tbody >tr').click(function(){
+			$(this).toggleClass('trSelected');
+		});
+		// 点击刷新数据
+		$('.pReload').click(function(){
+			location.href = location.href;
+		});
+
+	});
+	function delfun(obj) {
+		// 删除按钮
+		var confirm=$(obj).attr('data-name');
+		layer.confirm(confirm, {
+			btn: ['确定', '取消'] //按钮
+		}, function () {
+			$.ajax({
+				type: 'post',
+				url: $(obj).attr('data-url'),
+				data : {id:$(obj).attr('data-id')},
+				dataType: 'json',
+				success: function (data) {
+					if (data == 1) {
+						//$(obj).parent().parent().parent().remove();
+						//layer.closeAll();
+						window.location.reload();
+					} else {
+						layer.alert('操作失败', {icon: 2});  //alert('删除失败');
+					}
+				}
+			})
+		}, function () {
+		});
+	}
+</script>
+</body>
+</html>
+</html>

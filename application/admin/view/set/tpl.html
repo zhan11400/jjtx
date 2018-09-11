@@ -1,0 +1,9 @@
+<li>
+    <span class="item_name" style="width:120px;">商品：</span>
+    <select name="goodsid[]" class="goods" class="textbox textbox_295" style="height: 35px;width: 300px">
+        <volist name="goods" id="vo">
+            <option value="{$vo.id}"  selected>{$vo.name}-{$vo.vin}</option>
+        </volist>
+    </select>
+    <input type="text" name="name" placeholder="可搜索商品名称，vin"  class="search textbox textbox_295" />
+</li>

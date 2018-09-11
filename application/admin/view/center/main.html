@@ -1,0 +1,145 @@
+<include file="Public:header"/>
+<include file="Public:left"/>
+<style>
+	td {
+		text-align: center;
+	}
+</style>
+<style type="text/css" src="__STATIC__/admin/css/style.css" ></style>
+<section>
+	<div class="page_title">
+		<h2 class="fl">毛利记录</h2>
+		<form action="">
+			<select name="year" class='form-control'>
+				<volist name="years" id="y">
+				<option value="{$y['data']}"  <if condition="$y['data'] eq $year">selected="selected"</if>	>{$y['data']}年</option>
+				</volist>
+			</select>
+			 <span class="input-group-select">
+                    <select name="month" class='form-control month'>
+						<option value=''>月份</option>
+						<volist name="$months" id="m">
+						<option value="{$m['data']}" <if condition="$m['data'] eq $month">selected="selected"</if>>{$m['data']}月</option>
+						</volist>
+					</select>
+                </span>
+
+			<input  class="page_title_submit" type="submit" value="搜索">
+			<input  style="width: 100px;line-height: 20px;" type="submit" name="export" value="导出excel" />
+		</form>
+
+	</div>
+<div>
+	<table class="table">
+		<tr>
+			<td>月份</td>
+			<td>出货</td>
+			<td>入货</td>
+			<td>毛利</td>
+
+		</tr>
+	<volist name="$list" id="row">
+	<tr>
+		<td>{$row['data']}</td>
+		<td>{$row['price']}</td>
+		<td>{$row['costprice']}</td>
+		<td>{$row['mao']}</td>
+
+	</tr>
+	</volist>
+		<tr>
+			<td>统计</td>
+			<td>{$totalprice}</td>
+			<td>{$costprice}</td>
+			<td>{$maos}</td>
+
+		</tr>
+		</table>
+</div>
+	<div style="height: 120px"></div>
+</section>
+<script>
+
+	$(document).ready(function() {
+		//tab
+		$(".admin_tab li a").click(function() {
+			var liindex = $(".admin_tab li a").index(this);
+			$(this).addClass("active").parent().siblings().find("a").removeClass("active");
+			$(".admin_tab_cont").eq(liindex).fadeIn(150).siblings(".admin_tab_cont").hide();
+		});
+		$(".table .credit").click(function(){
+			$(this).hide();
+			$(this).siblings("input").prop("type","number");
+		});
+		/*$(".month").change(function(){
+			var month=$(this).val();
+			var year=$('select[name=year]').val();
+			$.post("{:url('center/days')}",{year:year,month:month},function(days){
+				days =parseInt(days);
+				$('select[name=day]').append("<option value=''>日期</option");
+				for(var i=1;i<=days;i++){
+					$('select[name=day]').append("<option value='" + i +"'>" + i + "日</option");
+				}
+			});
+		});*/
+		$(".table .credit_input").keydown(function(e){
+			var ev = document.all ? window.event : e;
+			if (ev.keyCode == 13) {
+				var str = $(this);
+				var id = $(this).data("id");
+				var a = new Number($(this).val());
+				var num = a.toFixed(2);
+				$.post("{:url('center/credit')}", {id: id, num: num}, function (result) {
+					if (result == 1) {
+						str.prop("type", "hidden");
+						str.val(num);
+						str.siblings("span").show();
+						str.siblings("span").html(num);
+					} else {
+						alert('系统繁忙，稍后再试');
+					}
+				});
+
+			}
+		})
+
+		$(".discount").click(function(){
+			$(this).hide();
+			$(this).siblings("input").prop("type","number");
+		});
+		$(".discount_input").keydown(function(e){
+			var ev = document.all ? window.event : e;
+			if (ev.keyCode == 13) {
+				var str = $(this);
+				var id = $(this).data("id");
+				var a = new Number($(this).val());
+				var num = a.toFixed(2);
+				$.post("{:url('center/discount')}", {id: id, num: num}, function (result) {
+					if (result == 1) {
+						str.prop("type", "hidden");
+						str.val(num);
+						str.siblings("span").show();
+						str.siblings("span").html(num);
+					} else {
+						alert('系统繁忙，稍后再试');
+					}
+				});
+
+			}
+		})
+		$(".grade").change(function(){
+			var status=$(this).val();
+			$.post("{:url('member/grade')}",{status:$(this).val(),id:$(this).data('id')},function(result){
+				if(result!=1){
+					alert('系统繁忙，稍后再试');
+				}
+			});
+		})
+	});
+</script>
+
+</div>
+</section>
+</body>
+
+</html>

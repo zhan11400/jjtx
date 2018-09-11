@@ -1,0 +1,88 @@
+<include file="public:header" />
+<include file="public:left" />
+	<form  method="post" enctype="multipart/form-data" id="brandForm">
+		<input type="hidden" name="id" value="{$banner.id}" />
+     <section>
+      <h2><strong>通知编辑</strong><a style="float: right" href="javascript:void(0)" onclick="history.go(-1)">返回上一页</a></h2>
+      <ul class="ulColumn2">
+          <li>   <span class="item_name" style="width:120px;">内容：</span>
+              <input type="text" class="textbox textbox_295" name="content" value="{$banner.content}"/>
+       </li>
+          <li>
+              <span class="item_name" style="width:120px;">类型：</span>
+              <label><input type="radio" name="type" <eq name="banner.type" value="1"> checked</eq> value="1"/>单商品</label>
+              <label><input type="radio" name="type" <neq name="banner.type" value="1"> checked</neq> value="2"/>多商品</label>
+          </li>
+
+          <li>
+              <span class="item_name" style="width:120px;">商品：</span>
+              <select name="goodsid[]" class="goods" class="textbox textbox_295" style="height: 35px;width: 300px">
+                  <volist name="goods" id="vo">
+                      <option value="{$vo.id}"  selected>{$vo.name}-{$vo.vin}</option>
+                  </volist>
+              </select>
+              <input type="text" name="name" placeholder="可搜索商品名称，vin"  class="search textbox textbox_295" />
+          </li>
+          <div class="ddd">
+          <li class="addgoods">
+              <span class="item_name" style="width:120px;">关联商品：</span>
+              <a href="javascript:;" id='add-param' onclick="addParam2()" style="margin-top:10px;" class="btn btn-primary"  title="添加商品"><i class='fa fa-plus'></i> 添加商品</a>
+              <table style="margin-left: 60px;margin-top: 10px;" cellspacing="100" >
+                  <tbody id="param-items" >
+                  </tbody>
+              </table>
+          </li>
+          </div>
+          <li>
+       <li>
+        <span class="item_name" style="width:120px;"></span>
+        <input type="button" class="link_btn" value="提交"/>
+       </li>
+      </ul>
+     </section>
+	 </form>
+     <!--tabStyle-->
+     <script type="text/javascript">
+     $(document).ready(function(){
+		 //tab
+		 $(".admin_tab li a").click(function(){
+		  var liindex = $(".admin_tab li a").index(this);
+		  $(this).addClass("active").parent().siblings().find("a").removeClass("active");
+		  $(".admin_tab_cont").eq(liindex).fadeIn(150).siblings(".admin_tab_cont").hide();
+		 });
+		 $(".link_btn").click(function(){
+             if(confirm("发送后将无法修改和撤回，确认信息准确无误？")) {
+                 $("#brandForm").submit();
+             }
+		 });
+		 });
+     function addParam2() {
+         $.ajax({
+             "url": "{:url('set/tpl')}",
+             success: function(data) {
+                 $('.ddd').append(data);
+             }
+         });
+         return;
+     }
+     $(document).on("keyup",'.search',function(){
+         var that=$(this);
+         $.post("{:url('set/sou')}",{key:$(this).val()},function(result){
+             that.siblings(".goods").html(result);
+         });
+     });
+     $('input:radio[name="type"]:checked').val();
+     $("input:radio[name='type']").click(function(){
+         if($(this).val()==2){
+             $(".ddd").show();
+         }else{
+             $(".ddd").hide();
+         }
+     });
+
+
+     </script>
+ </div>
+</section>
+</body>
+</html>

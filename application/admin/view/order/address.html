@@ -1,0 +1,56 @@
+<include file="Public:header" />
+<include file="Public:left" />
+	 <style>
+	 td{text-align:center;}
+	 </style>
+     <section>
+      <div class="page_title">
+          <h2 class="fl">修改收货人资料</h2>
+      </div>
+
+<form class="form-horizontal form-validate" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="id" value="7300">
+    <ul class="ulColumn2">
+        <li>
+            <span class="item_name" style="width:120px;">收货人姓名：</span>
+            <input type="text" name="remark" class="textbox textbox_295" placeholder="收货人姓名..." value="{$res.remark}"/>
+        </li>
+        <li>
+            <span class="item_name" style="width:120px;">手机号码：</span>
+            <input type="text" name="remark" class="textbox textbox_295" placeholder="手机号码..." value="{$res.remark}"/>
+        </li>
+        <li>
+            <span class="item_name" style="width:120px;">省份：</span>
+            <input type="text" name="remark" class="textbox textbox_295" placeholder="省份..." value="{$res.remark}"/>
+        </li>
+        <li>
+            <span class="item_name" style="width:120px;">城市：</span>
+            <input type="text" name="remark" class="textbox textbox_295" placeholder="省份..." value="{$res.remark}"/>
+        </li>
+        <li>
+            <span class="item_name" style="width:120px;">区/县：</span>
+            <input type="text" name="remark" class="textbox textbox_295" placeholder="区/县..." value="{$res.remark}"/>
+        </li>
+        <li>
+            <span class="item_name" style="width:120px;">详细地址：</span>
+            <input type="text" name="remark" class="textbox textbox_295" placeholder="详细地址..." value="{$res.remark}"/>
+        </li>
+        <span class="item_name" style="width:120px;"></span>
+        <input type="hidden" name="id"  value="{$id}"/>
+        <input type="submit" class="link_btn" value="提交"/>
+
+        </li>
+        </ul>
+</form>
+     </section>
+ </div>
+</section>
+<script>
+    $(".express").change(function(){
+       var name=$(this).find("option:selected").data('name');
+
+       $(".exprss_name").val(name);
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<?php
+ $active=request()->controller().'/'.request()->action();
+
+?>
+<aside class="lt_aside_nav content mCustomScrollbar">
+	<h2><a href="{:url('Index/index')}">起始页</a></h2>
+	<ul>
+		<li>
+			<dl>
+				<dt>门店</dt>
+				<dd>
+					<a href="{:url('Center/member')}"  <eq name="active" value="Center/member">class="active"</eq>>门店列表</a>
+				</dd>
+			</dl>
+		</li>
+		<li>
+			<dl>
+				<dt>订单</dt>
+				<dd>
+					<a href="{:url('Order/order_list')}"  <eq name="active" value="Order/order_list">class="active"</eq>>订单列表</a>
+				</dd>
+			</dl>
+		</li>
+		<!--<li>
+			<dl>
+				<dt>设置</dt>
+				<dd>
+					<a href="{:url('Set/index')}"  <eq name="active" value="Set/index">class="active"</eq>>设置</a>
+				</dd>
+			</dl>
+		</li>-->
+		<li>
+			<p class="btm_infor">© 版权所有</p>
+		</li>
+	</ul>
+
+</aside>
+<section class="rt_wrap content mCustomScrollbar">
+	<div class="rt_content">
+
+		<!--点击加载-->
+		<script>
+			$(document).ready(function() {
+				$("#loading").click(function() {
+					$(".loading_area").fadeIn();
+					$(".loading_area").fadeOut(1500);
+				});
+			});
+		</script>
+		<section class="loading_area">
+			<div class="loading_cont">
+				<div class="loading_icon"><i></i><i></i><i></i><i></i><i></i></div>
+				<div class="loading_txt"><mark>数据正在加载，请稍后！</mark></div>
+			</div>
+		</section>
+		<!--结束加载-->
+		<!--弹出框效果-->
+		<script>
+			$(document).ready(function() {
+				//弹出文本性提示框
+				$("#showPopTxt").click(function() {
+					$(".pop_bg").fadeIn();
+				});
+				//弹出：确认按钮
+				$(".trueBtn").click(function() {
+					alert("你点击了确认！"); //测试
+					$(".pop_bg").fadeOut();
+				});
+				//弹出：取消或关闭按钮
+				$(".falseBtn").click(function() {
+					alert("你点击了取消/关闭！"); //测试
+					$(".pop_bg").fadeOut();
+				});
+			});
+		</script>
+		<section class="pop_bg">
+			<div class="pop_cont">
+				<!--title-->
+				<h3>弹出提示标题</h3>
+				<!--content-->
+				<div class="pop_cont_input">
+					<ul>
+						<li>
+							<span>标题</span>
+							<input type="text" placeholder="定义提示语..." class="textbox" />
+						</li>
+						<li>
+							<span class="ttl">城市</span>
+							<select class="select">
+								<option>选择省份</option>
+							</select>
+							<select class="select">
+								<option>选择城市</option>
+							</select>
+							<select class="select">
+								<option>选择区/县</option>
+							</select>
+						</li>
+						<li>
+							<span class="ttl">地址</span>
+							<input type="text" placeholder="定义提示语..." class="textbox" />
+						</li>
+						<li>
+							<span class="ttl">地址</span>
+							<textarea class="textarea" style="height:50px;width:80%;"></textarea>
+						</li>
+					</ul>
+				</div>
+				<!--以pop_cont_text分界-->
+				<div class="pop_cont_text">
+					这里是文字性提示信息！
+				</div>
+				<!--bottom:operate->button-->
+				<div class="btm_btn">
+					<input type="button" value="确认" class="input_btn trueBtn" />
+					<input type="button" value="关闭" class="input_btn falseBtn" />
+				</div>
+			</div>
+		</section>
+		<!--结束：弹出框效果-->

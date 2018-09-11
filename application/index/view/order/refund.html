@@ -1,0 +1,85 @@
+<include file="Public:header" />
+<include file="Public:left" />
+	 <style>
+	 td{text-align:center;}
+	 </style>
+     <section style="width: 49%">
+      <div class="page_title">
+          <h2 class="fl">退款信息</h2>
+      </div>
+
+<form class="form-horizontal form-validate" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="id" value="7300">
+    <ul class="ulColumn2">
+        <li>
+            <span class="item_name" style="width:120px;">订单号：</span>{$list.order_sn}
+        </li>
+        <li>
+            <span class="item_name" style="width:120px;">订单金额：</span>{$list.price}
+        </li>
+        <li>
+            <span class="item_name" style="width:120px;">收货人：</span>{$list.name}
+        </li>
+        <li>
+            <span class="item_name" style="width:120px;">手机号码：</span>{$list.mobile}
+        </li>
+        <li>
+            <span class="item_name" style="width:120px;">收货地址：</span>{$list.province}{$list.city}{$list.county}{$list.address}
+        </li>
+        <li>
+            <span class="item_name" style="width:120px;">申请说明：</span>{$list.content}
+        </li>
+        <eq name="list.type" value="2">
+            <li><span class="item_name" style="width:120px;">退款方式：</span>退货退款</li>
+
+            <else />
+             <li><span class="item_name" style="width:120px;">退款方式：</span>退款</li>
+        </eq>
+        <if condition="$list['rstatus'] gt '2'">
+            <li><span class="item_name" style="width:120px;">快递公司：</span>{$list.express}</li>
+            <li><span class="item_name" style="width:120px;">快递单号：</span>{$list.express_sn}</li>
+            <if condition="!empty($express)">
+                <volist name="express" id="vo">
+                    <li>
+                        <span class="item_name" style="width:200px;">{$vo.time}</span>{$vo.context}
+                    </li>
+                </volist>
+                <else />
+                <li><span class="item_name" style="width:200px;">暂无物流信息</span></li>
+            </if>
+        </if>
+        <li>
+            <span class="item_name" style="width:120px;">操作备注：</span><input name="reply" value="{$list.reply}">
+        </li>
+        <li>
+            <span class="item_name" style="width:120px;">注意：</span>请先沟通好再操作私下退款处理
+        </li>
+        <li>
+            <span class="item_name" style="width:120px;"></span>
+            <input type="hidden" name="type" value="{$list.type}">
+            <input type="hidden" name="refundid" value="{$list.id}">
+            <eq name="list.rstatus" value="0">
+            <eq name="list.type" value="2">
+                <input type="submit" name="submit"  class="link_btn" value="允许退货"/>
+        <else />
+                <input type="submit" name="submit"  class="link_btn" value="确认退款"/>
+        </eq>
+                <input type="submit" name="submit" class="link_btn" value="拒绝申请"/>
+            </eq>
+            <eq name="list.rstatus" value="1"> <input type="submit" name="submit"  class="link_btn" value="确认退款"/></eq>
+            <eq name="list.rstatus" value="3">已完成退款</eq>
+        </li>
+        </ul>
+</form>
+     </section>
+ </div>
+</section>
+<script>
+    $(".express").change(function(){
+       var name=$(this).find("option:selected").data('name');
+
+       $(".exprss_name").val(name);
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<include file="Public:header" /> <include file="Public:left" />
+<div class="flexigrid">
+	<div class="mDiv">
+		<div class="ftitle">
+			<h3>编辑商品品牌</h3>
+			<h5><a class="fr" href="javascript:void(0)" onclick="history.go(-1)">返回上一页</a></h5>
+		</div>
+	</div>
+</div>
+<form method="post" enctype="multipart/form-data" >
+	<input type="hidden" name="id" />
+	<section>
+		<ul class="ulColumn2">
+			<li>
+				<span class="item_name" style="width:120px;">商品品牌名称：</span>
+				<input type="text" name="name"  class="textbox textbox_295" value='<if condition="$goods_result">{$goods_result.name}</if>'/>
+			</li>
+			<li>
+				<span class="item_name" style="width:120px;">主图上传：</span>
+				<div class="textbox textbox_295" style="width:200px;display: inline-block;">
+					<input type="file" name="image" />
+				</div><span style="color: red;margin-left: 20px">尺寸：30*30</span>
+			</li>
+			<if condition="isset($goods_result['image'])">
+			<li>
+				<span class="item_name" style="width:120px;">主图：</span>
+				<div class="textbox textbox_295" style="width:200px;display: inline-block;">
+					<img height="30px" src="__STATIC__/uploads/{$goods_result.image}" alt="">
+				</div>
+			</li>
+				</if>
+			<if condition="$goods_result">
+				<li>
+					<span class="item_name" style="width:120px;">商品品牌状态：</span>
+					<label>
+						<input type="radio" name="status"  value='1' <if condition="$goods_result.status eq 1">checked="checked"</if>>显示
+					</label>
+					<label>
+						<input type="radio" name="status"  value='-1' <if condition="$goods_result.status eq -1">checked="checked"</if>>隐藏
+					</label>
+				</li>
+			</if>
+			<li>
+				<span class="item_name" style="width:120px;"></span>
+				<input type="submit" class="link_btn" value="提交" />
+			</li>
+		</ul>
+		<div style="height: 150px;"></div>
+	</section>
+</form>
+
+</div>
+</section>
+<script type="text/javascript">
+
+</script>
+</body>
+
+</html>

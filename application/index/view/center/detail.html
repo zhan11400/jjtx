@@ -1,0 +1,79 @@
+{include file="Public:header" /}
+{include file="Public:left" /}
+<style>
+	td {
+		text-align: center;
+	}
+</style>
+<style type="text/css" src="__STATIC__/admin/css/style.css" ></style>
+<section>
+	<div class="page_title">
+		<h2 class="fl">详情   </h2>
+	</div>
+	<ul class="ulColumn2">
+		<li>
+			<span class="item_name" style="width:120px;">会员姓名：</span> {$list.name}
+		</li>
+		<li>
+			<span class="item_name" style="width:120px;">身份证号：</span> {$list.number}
+		</li>
+		<li>
+			<span class="item_name" style="width:120px;">电话号码：</span> {$list.tel}
+		</li>
+		<li>
+			<span class="item_name" style="width:120px;">工龄：</span> {$list.year}年
+		</li>
+		<li>
+			<span class="item_name" style="width:120px;">所在地：</span> {$list.address}
+		</li>
+		<li>
+			<span class="item_name" style="width:120px;">服务区域：</span> {$list.county}
+		</li>
+		<li>
+			<span class="item_name" style="width:120px;">所在公司：</span> {$list.company}
+		</li>
+		<li>
+			<span class="item_name" style="width:120px;">工作证：</span> 
+			<img width="100" src="{$list['images']['job']}">
+		</li>
+		<li>
+			<span class="item_name" style="width:120px;">身份证正面：</span> 
+			<img width="100" src="{$list['images']['face']}">
+		</li>
+		<li>
+			<span class="item_name" style="width:120px;">身份证背面：</span> 
+			<img width="100" src="{$list['images']['back']}">
+		</li>
+		<li>
+			<span class="item_name" style="width:120px;">资质证书：</span> 
+			<img width="100" src="{$list['images']['qualification']}">
+		</li>
+		<li>
+			<span class="item_name" style="width:120px;">学历证书：</span> 
+			<img width="100" src="{$list['images']['diploma']}">
+		</li>
+		<li>
+			<a href="{:url('center/ok',array('id'=>$list['uid']))}" class="link_btn">通过认证</a>
+			<a href="{:url('center/no',array('id'=>$list['uid']))}" class="link_btn">拒绝认证</a>
+		</li>
+</ul>
+<div style="height: 150px;"></div>
+</section>
+
+<!--tabStyle-->
+<script>
+	$(document).ready(function() {
+		//tab
+		$(".admin_tab li a").click(function() {
+			var liindex = $(".admin_tab li a").index(this);
+			$(this).addClass("active").parent().siblings().find("a").removeClass("active");
+			$(".admin_tab_cont").eq(liindex).fadeIn(150).siblings(".admin_tab_cont").hide();
+		});
+	});
+</script>
+
+</div>
+</section>
+</body>
+
+</html>
